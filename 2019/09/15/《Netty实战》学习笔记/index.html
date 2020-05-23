@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Netty,开源,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
+<meta name="keywords" content="Netty,开源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="《Netty实战》学习笔记">
+<meta property="og:url" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/index.html">
+<meta property="og:site_name" content="Richey&#39;s Notes">
+<meta property="og:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/DgHmWDkSfy9k72c6wGCwSYV6SQL1ugJSpp5tXARtkUU!/b/dDQBAAAAAAAA&bo=8wMVAgAAAAADB8U!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4xpl83pLwnO*lBXOm822CnFzk7TUJ9WzcJ5hrXP90OY!/b/dDYBAAAAAAAA&bo=zAMIAswDCAIDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/SZKXEwpLJfvjerpbHzTEC6LEneCyJgAAm7gtoYd1EDw!/b/dDIBAAAAAAAA&bo=mwPvAZsD7wEDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/kl6jEp3T0dDMOJG8vhCwvw00c6up4e.JmbyUP06683I!/b/dFkAAAAAAAAA&bo=8gOFAgAAAAADB1Q!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/jVKNLuH7s2UivaSk8okFDg8QfXQGLeVpPmqfNJaaazg!/b/dDEBAAAAAAAA&bo=cwM9AQAAAAADB24!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NxdtoKReJ0MZ60K7zN9rswTNblQTIrOoa56pmsA5Xi4!/b/dDQBAAAAAAAA&bo=sAOOAwAAAAADBxw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/tg7YHYAWL.DfPdgCMi.QtlwgfMGspLcgLx8wibNiP8Q!/b/dIMAAAAAAAAA&bo=AwTvAQAAAAADB8s!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/lqRpK4k0jHio4ZHHQoDIHffSn1Spioj8QM7hj62yt24!/b/dDcBAAAAAAAA&bo=qANAAgAAAAADB8s!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/pISS9lY3M2yeEqCt7DeH2BYyP*PgJnsPVSRZ2IN8ziw!/b/dAgBAAAAAAAA&bo=NwOrAQAAAAADB7w!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JI22R6rkIPvJsIgoYgggCgdZGRgkAYXHo41T8s8W91M!/b/dDQBAAAAAAAA&bo=nQKvAQAAAAADBxM!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Rdxh74.VK6RTrv7SHxM5W5jyCwhGe6AsPvWpFRyXI3k!/b/dDQBAAAAAAAA&bo=SwOLAQAAAAADB.A!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KMdT.wcR1RaQkGf05H0wvXY4pMW27FsZ5VkuGFWKj*U!/b/dEUBAAAAAAAA&bo=DQRAAgAAAAADB2k!&rf=viewer_4">
+<meta property="og:updated_time" content="2019-09-15T13:28:40.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="《Netty实战》学习笔记">
+<meta name="twitter:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
+<meta name="twitter:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/">
+
+
+
+
+
+  <title>《Netty实战》学习笔记 | Richey's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Richey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">温故知新</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="RicheyCheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">《Netty实战》学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-15T21:26:47+08:00">
+                2019-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开源框架/" itemprop="url" rel="index">
+                    <span itemprop="name">开源框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="1-Netty的组件和设计"><a href="#1-Netty的组件和设计" class="headerlink" title="1. Netty的组件和设计"></a>1. Netty的组件和设计</h4><h5 id="1-1-Netty组件与网络抽象"><a href="#1-1-Netty组件与网络抽象" class="headerlink" title="1.1 Netty组件与网络抽象"></a>1.1 Netty组件与网络抽象</h5><ul>
+<li>Channel —— Socket</li>
+<li>EventLoop —— 控制流、多线程处理、并发</li>
+<li>ChannelFuture —— 异步通知</li>
+<li>ChannelHandler —— Logic</li>
+<li>ChannelPipeline —— Logic Chain</li>
+<li>ByteBuf —— IO Bytes</li>
+</ul>
+<h5 id="1-2-Channel、EventLoop、EventLoopGroup和Thread"><a href="#1-2-Channel、EventLoop、EventLoopGroup和Thread" class="headerlink" title="1.2  Channel、EventLoop、EventLoopGroup和Thread"></a>1.2  Channel、EventLoop、EventLoopGroup和Thread</h5><p>EventLoop定义了Netty的核心抽象，用于处理连接的生命周期中所发生的事件。  </p>
+<ul>
+<li>一个EventLoopGroup包含一个或多个EventLoop（<strong>EventLoopGroup : EventLoop = 1 : N</strong>）</li>
+<li>一个EventLoop在它的生命周期内只和一个Thread绑定（<strong>EventLoop : Thread = 1 : 1</strong>）</li>
+<li>所有由EventLoop处理的I/O事件都将在它专有的Thread上被处理</li>
+<li>一个Channel在它的生命周期内只注册于一个EventLoop</li>
+<li>一个EventLoop可能会被分配给一个或多个Channel（<strong>EventLoop : Channel = 1 : N</strong>）</li>
+</ul>
+<h5 id="1-3-ChannelHandler安装到ChannelPipeline的过程"><a href="#1-3-ChannelHandler安装到ChannelPipeline的过程" class="headerlink" title="1.3 ChannelHandler安装到ChannelPipeline的过程"></a>1.3 ChannelHandler安装到ChannelPipeline的过程</h5><ul>
+<li>一个ChannelInitializer的实现被注册到ServerBootstrap中；</li>
+<li>当ChannelInitializer.initChannel()方法被调用时，ChannelInitializer将在ChannelPipeline中安装一组自定义的ChannelHandler；</li>
+<li>ChannelInitializer将它自己从ChannelPipeline中移除。</li>
+</ul>
+<p>注：实际上，ChannelPipeline就是ChannelHandler的编排顺序！</p>
+<h5 id="1-4-不同事件传输方向的确定"><a href="#1-4-不同事件传输方向的确定" class="headerlink" title="1.4 不同事件传输方向的确定"></a>1.4 不同事件传输方向的确定</h5><p>虽然ChannelInboundHandler和ChannelOutboundHandler都扩展自ChannelHandler，但是Netty能区分ChannelInboundHandler和ChannelOutboundHandler的实现，并确保数据只会在具有<strong>相同定向类型</strong>的两个ChannelHandler之间传递。</p>
+<h5 id="1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext"><a href="#1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext" class="headerlink" title="1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext"></a>1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext</h5><p>当ChannelHandler被添加到ChannelPipeline时，它将会被分配一个ChannelHandlerContext，其代表了ChannelHandler和ChannelPipeline之间的绑定。虽然这个对象可以被用于获取底层的Channel，但是它主要还是被用于写出站数据。</p>
+<h6 id="1-5-1-相互关系"><a href="#1-5-1-相互关系" class="headerlink" title="1.5.1 相互关系"></a>1.5.1 相互关系</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4" alt="image"></p>
+<h6 id="1-5-2-通过Channel或ChannelPipeline进行的事件传播"><a href="#1-5-2-通过Channel或ChannelPipeline进行的事件传播" class="headerlink" title="1.5.2 通过Channel或ChannelPipeline进行的事件传播"></a>1.5.2 通过Channel或ChannelPipeline进行的事件传播</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/DgHmWDkSfy9k72c6wGCwSYV6SQL1ugJSpp5tXARtkUU!/b/dDQBAAAAAAAA&bo=8wMVAgAAAAADB8U!&rf=viewer_4" alt="image"></p>
+<h6 id="1-5-3-通过ChannelHandlerContext触发的操作的事件流"><a href="#1-5-3-通过ChannelHandlerContext触发的操作的事件流" class="headerlink" title="1.5.3 通过ChannelHandlerContext触发的操作的事件流"></a>1.5.3 通过ChannelHandlerContext触发的操作的事件流</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4xpl83pLwnO*lBXOm822CnFzk7TUJ9WzcJ5hrXP90OY!/b/dDYBAAAAAAAA&bo=zAMIAswDCAIDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-6-Netty中的消息流动"><a href="#1-6-Netty中的消息流动" class="headerlink" title="1.6 Netty中的消息流动"></a>1.6 Netty中的消息流动</h5><p>在Netty中，有两种发送消息的方式。可以直接写到Channel中，也可以写到和ChannelHandler相关联的ChannnelHandlerContext对象中。前一种方式将会导致消息从ChannelPipeline的尾端开始流动，而后者将导致消息从ChannelPipeline中的下一个ChannelHandler开始流动。</p>
+<h5 id="1-7-编码器和解码器"><a href="#1-7-编码器和解码器" class="headerlink" title="1.7 编码器和解码器"></a>1.7 编码器和解码器</h5><ul>
+<li>涉及数据格式转换的原因是由于：网络数据总是一系列的字节。  </li>
+<li>所有由Netty提供的编码器/解码器适配器类都实现了ChannelOutboundHandler或者ChannelInboundHandler接口。</li>
+</ul>
+<h5 id="1-8-抽象类SimpleChannelInboundHandler"><a href="#1-8-抽象类SimpleChannelInboundHandler" class="headerlink" title="1.8 抽象类SimpleChannelInboundHandler"></a>1.8 抽象类SimpleChannelInboundHandler</h5><p>注意：</p>
+<ul>
+<li>最重要的方法channelRead0(ChannelHandlerContext, T)</li>
+<li>该类会自动释放资源，不应该存储指向任何消息的引用供将来使用，因为这些引用都将会失效。</li>
+</ul>
+<h5 id="1-9-引导"><a href="#1-9-引导" class="headerlink" title="1.9 引导"></a>1.9 引导</h5><ul>
+<li>有两种不同类型的引导：一种用于客户端（Bootstrap），而另一种（ServerBootstrap）用于服务器。无论应用程序使用哪种协议或者处理哪种类型的数据，唯一决定它使用哪种引导类的是它作为客户端还是服务器。</li>
+<li>Bootstrap用于连接到远程的主机和端口，ServerBootstrap用于绑定到一个本地端口。</li>
+<li>Bootstrap只需要一个EventLoopGroup，ServerBootstrap则需要两个。ServerBootstrap需要两个EventLoopGroup的原因是服务器需要两组不同的Channel，第一组只包含一个ServerChannel，代表服务器自身的已绑定到某个本地端口的正在监听的套接字，而第二组将包含所有已创建的用来处理传入客户端连接的Channel（每个服务器已经接受的连接都有一个Channel）。</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/SZKXEwpLJfvjerpbHzTEC6LEneCyJgAAm7gtoYd1EDw!/b/dDIBAAAAAAAA&bo=mwPvAZsD7wEDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-10-NIO选择器（Selector）"><a href="#1-10-NIO选择器（Selector）" class="headerlink" title="1.10 NIO选择器（Selector）"></a>1.10 NIO选择器（Selector）</h5><ul>
+<li>选择器背后的基本概念是充当一个注册表，在那里你将可以请求在Channel的状态发生变化时得到通知。</li>
+<li>选择器运行在一个检查状态变化并对其做出相应响应的线程上，在应用程序对状态的改变做出响应之后，选择器将会被重置，并将重复这个过程。</li>
+</ul>
+<h6 id="1-10-1-选择操作的位模式"><a href="#1-10-1-选择操作的位模式" class="headerlink" title="1.10.1 选择操作的位模式"></a>1.10.1 选择操作的位模式</h6><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>OP_ACCEPT</td>
+<td>请求在接受新连接并创建Channel时获得通知</td>
+</tr>
+<tr>
+<td>OP_CONNECT</td>
+<td>请求在建立一个连接时获得通知</td>
+</tr>
+<tr>
+<td>OP_READ</td>
+<td>请求当数据已经就绪，可以从Channel中读取时获取通知</td>
+</tr>
+<tr>
+<td>OP_WRITE</td>
+<td>请求当可以向Channel中写更多的数据时获取通知。</td>
+</tr>
+</tbody></table>
+<h6 id="1-10-2-选择并处理状态的变化"><a href="#1-10-2-选择并处理状态的变化" class="headerlink" title="1.10.2 选择并处理状态的变化"></a>1.10.2 选择并处理状态的变化</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/kl6jEp3T0dDMOJG8vhCwvw00c6up4e.JmbyUP06683I!/b/dFkAAAAAAAAA&bo=8gOFAgAAAAADB1Q!&rf=viewer_4" alt="image"></p>
+<h4 id="2-ChannelHandler和ChannelPipeline"><a href="#2-ChannelHandler和ChannelPipeline" class="headerlink" title="2. ChannelHandler和ChannelPipeline"></a>2. ChannelHandler和ChannelPipeline</h4><h5 id="2-1-Channel的生命周期"><a href="#2-1-Channel的生命周期" class="headerlink" title="2.1 Channel的生命周期"></a>2.1 Channel的生命周期</h5><table>
+<thead>
+<tr>
+<th>状态</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ChannelUnregistered</td>
+<td>Channel已经被创建，但还未注册到EventLoop</td>
+</tr>
+<tr>
+<td>ChannelRegistered</td>
+<td>Channel已经被注册到了EventLoop</td>
+</tr>
+<tr>
+<td>ChannelActive</td>
+<td>Channel处于活动状态（已经连接到它的远程节点）。现在可以接收和发送数据。</td>
+</tr>
+<tr>
+<td>ChannelInactive</td>
+<td>Channel没有连接到远程节点</td>
+</tr>
+</tbody></table>
+<h5 id="2-2-ChannelHandler的生命周期方法"><a href="#2-2-ChannelHandler的生命周期方法" class="headerlink" title="2.2 ChannelHandler的生命周期方法"></a>2.2 ChannelHandler的生命周期方法</h5><table>
+<thead>
+<tr>
+<th>类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>handlerAdded</td>
+<td>当把ChannelHandler添加到ChannelPipeline中时被调用</td>
+</tr>
+<tr>
+<td>handlerRemoved</td>
+<td>当从ChannelPipeline中移除ChannelHandler时被调用</td>
+</tr>
+<tr>
+<td>exceptionCaught</td>
+<td>当处理过程中在ChannelPipeline中有错误产生时被调用</td>
+</tr>
+</tbody></table>
+<p>注意：这些方法每一个都接受一个ChannelHandlerContext参数！</p>
+<h5 id="2-3-ChannelHandlerAdapter"><a href="#2-3-ChannelHandlerAdapter" class="headerlink" title="2.3 ChannelHandlerAdapter"></a>2.3 ChannelHandlerAdapter</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/jVKNLuH7s2UivaSk8okFDg8QfXQGLeVpPmqfNJaaazg!/b/dDEBAAAAAAAA&bo=cwM9AQAAAAADB24!&rf=viewer_4" alt="image"></p>
+<ul>
+<li>ChannelHandlerAdapter类提供了实用方法isSharable()，如果其对应的实现被标注为Sharable，那么这个方法将返回true，表示它可以被添加到多个ChannelPipeline中。</li>
+<li>在ChannelInboundHandlerAdapter和ChannelOutboundHandlerAdapter中所提供的方法体调用了其相关联的ChannelHandlerContext上的等效方法，从而将事件转发到了ChannelPipeline的下一个ChannelHandler中。</li>
+<li>如果需要在自己的ChannelHandler中使用这些适配器类，只需要简单地扩展它们，并且重写那些你想要自定义的方法。</li>
+<li>如果一个消息被消费或者丢弃了，并且没有传递给ChannelPipeline中的下一个ChannelOutboundHandler，那么用户就有责任调用ReferenceCountUtil.release()释放资源。如果消息到达了实际的传输层，那么当它被写入时或者Channel关闭时，都将被自动释放。</li>
+</ul>
+<h5 id="2-4-ChannelPipeline接口"><a href="#2-4-ChannelPipeline接口" class="headerlink" title="2.4 ChannelPipeline接口"></a>2.4 ChannelPipeline接口</h5><ul>
+<li>ChannelPipeline是一个<strong>拦截流经Channel的入站和出站事件</strong>（作用）的<strong>ChannelHandler实例链</strong>（实质）。</li>
+<li>根据事件的起源，事件将会被ChannelInboundHandler或者ChannelOutboundHandler处理，随后通过调用ChannelHandlerContext实现，它将会被转发给<strong>同一超类型</strong>的下一个ChannelHandler。</li>
+<li>ChannelPipeline还提供了通过ChannelPipeline本身传播事件的方法，如果一个入站事件被触发，它将被从ChannelPipeline的头部开始一直被传播到ChannelPipeline的尾端。</li>
+<li>在ChannelPipeline传播事件时，它会测试ChannelPipeline中的下一个ChannelHandler的类型是否和<strong>事件的运动方向相匹配</strong>。如果不匹配，ChannelPipeline将跳过该ChannelHandler并前进到下一个，直到它找到和该事件所期望的方向相匹配的为止。（ChannelHandler也可以同时实现ChannelInboundHandler和ChannelOutboundHandler接口。）</li>
+<li>通常ChannelPipeline中的每一个ChannelHandler都是通过它的EventLoop（I/O线程）来处理传递给它的事件的，所以至关重要的是，<strong>不要阻塞这个线程</strong>，因为这会对整体的I/O处理产生负面的影响。</li>
+</ul>
+<h5 id="2-5-ChannelHandlerContext接口"><a href="#2-5-ChannelHandlerContext接口" class="headerlink" title="2.5 ChannelHandlerContext接口"></a>2.5 ChannelHandlerContext接口</h5><ul>
+<li>ChannelHandlerContext的主要功能是管理它所关联的ChannelHandler和在同一个ChannelPipeline中的其他ChannelHandler之间的交互。</li>
+<li>ChannelHandlerContext和ChannelHandler之间的关联（绑定）是永远不会改变的，所以缓存对它的引用是安全的。</li>
+<li>相对于其他类的同名方法，ChannelHandlerContext的方法将产生更短的事件流，应该尽可能地利用这个特性来获得最大的性能。</li>
+<li>要想调用从某个特定的ChannelHandler开始的处理过程，必须获取到在该ChannelHandler之前的ChannelHandler所关联的ChannelHandlerContext。这个ChannelHandlerContext将调用和它所关联的ChannelHandler之后的ChannelHandler。</li>
+<li>一个ChannelHandler可以从属于多个ChannelPipeline，所以它也可以绑定到多个ChannelHandlerContext实例，这种ChannelHandler必须使用@Sharable注解标注。并且只应该在确定了你的ChannelHandler是线程安全的时候才使用该注解。</li>
+</ul>
+<h5 id="2-6-异常处理"><a href="#2-6-异常处理" class="headerlink" title="2.6 异常处理"></a>2.6 异常处理</h5><ul>
+<li>ChannelHandler.exceptionCaught()的默认实现是简单地将当前异常转发给ChannelPipeline中下一个ChannelHandler。</li>
+<li>如果异常到达了ChannelPipeline的尾端，它将会被记录为未被处理。</li>
+<li>要自定义异常处理逻辑，需要重写exceptionCaught()方法，决定是否需要将该异常传播出去。</li>
+</ul>
+<h4 id="3-EventLoop和线程模型"><a href="#3-EventLoop和线程模型" class="headerlink" title="3. EventLoop和线程模型"></a>3. EventLoop和线程模型</h4><h5 id="3-1-EventLoop类层次结构"><a href="#3-1-EventLoop类层次结构" class="headerlink" title="3.1 EventLoop类层次结构"></a>3.1 EventLoop类层次结构</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NxdtoKReJ0MZ60K7zN9rswTNblQTIrOoa56pmsA5Xi4!/b/dDQBAAAAAAAA&bo=sAOOAwAAAAADBxw!&rf=viewer_4" alt="image"></p>
+<ul>
+<li>在该模型中，EventLoop将由一个永远都不会改变的Thread驱动，同时任务（Runnable或者Callable）可以直接提交给EventLoop实现，以立即执行或者调度执行。</li>
+<li>根据配置和可用核心的不同，可能会创建多个EventLoop实例用以优化资源的使用，并且单个EventLoop可能会被指派用于服务多个Channel。</li>
+<li>事件/任务的执行顺序是以先进先出FIFO的顺序执行的。</li>
+</ul>
+<h5 id="3-2-EventLoop的执行逻辑"><a href="#3-2-EventLoop的执行逻辑" class="headerlink" title="3.2 EventLoop的执行逻辑"></a>3.2 EventLoop的执行逻辑</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/tg7YHYAWL.DfPdgCMi.QtlwgfMGspLcgLx8wibNiP8Q!/b/dIMAAAAAAAAA&bo=AwTvAQAAAAADB8s!&rf=viewer_4" alt="image"></p>
+<p>注意：每个EventLoop都有它自己的任务队列，独立于任何其他的EventLoop。</p>
+<h5 id="3-3-EventLoop-线程的分配"><a href="#3-3-EventLoop-线程的分配" class="headerlink" title="3.3 EventLoop/线程的分配"></a>3.3 EventLoop/线程的分配</h5><h6 id="3-3-2-异步传输的EventLoop分配方式"><a href="#3-3-2-异步传输的EventLoop分配方式" class="headerlink" title="3.3.2 异步传输的EventLoop分配方式"></a>3.3.2 异步传输的EventLoop分配方式</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/lqRpK4k0jHio4ZHHQoDIHffSn1Spioj8QM7hj62yt24!/b/dDcBAAAAAAAA&bo=qANAAgAAAAADB8s!&rf=viewer_4" alt="image"></p>
+<ul>
+<li>EventLoopGroup负责为每个新创建的Channel分配一个EventLoop，一旦一个Channel被分配一个EventLoop，它将在它的整个生命周期中都使用这个EventLoop（以及相关联的Thread）。</li>
+<li>需要注意的是，EventLoop的分配方式对ThreadLocal的使用的影响。因为一个EventLoop通常会被用于支撑多个Channel，所以对于所有相关联的Channel来说，ThreadLocal都将是一样的。</li>
+</ul>
+<h6 id="3-3-2-阻塞传输的EventLoop分配方式"><a href="#3-3-2-阻塞传输的EventLoop分配方式" class="headerlink" title="3.3.2 阻塞传输的EventLoop分配方式"></a>3.3.2 阻塞传输的EventLoop分配方式</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/pISS9lY3M2yeEqCt7DeH2BYyP*PgJnsPVSRZ2IN8ziw!/b/dAgBAAAAAAAA&bo=NwOrAQAAAAADB7w!&rf=viewer_4" alt="image"></p>
+<h4 id="4-引导"><a href="#4-引导" class="headerlink" title="4. 引导"></a>4. 引导</h4><h5 id="4-1-引导客户端"><a href="#4-1-引导客户端" class="headerlink" title="4.1 引导客户端"></a>4.1 引导客户端</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JI22R6rkIPvJsIgoYgggCgdZGRgkAYXHo41T8s8W91M!/b/dDQBAAAAAAAA&bo=nQKvAQAAAAADBxM!&rf=viewer_4" alt="image"></p>
+<h5 id="4-2-引导服务器"><a href="#4-2-引导服务器" class="headerlink" title="4.2 引导服务器"></a>4.2 引导服务器</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Rdxh74.VK6RTrv7SHxM5W5jyCwhGe6AsPvWpFRyXI3k!/b/dDQBAAAAAAAA&bo=SwOLAQAAAAADB.A!&rf=viewer_4" alt="image"></p>
+<h5 id="4-3-从Channel引导客户端进行请求转发"><a href="#4-3-从Channel引导客户端进行请求转发" class="headerlink" title="4.3 从Channel引导客户端进行请求转发"></a>4.3 从Channel引导客户端进行请求转发</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KMdT.wcR1RaQkGf05H0wvXY4pMW27FsZ5VkuGFWKj*U!/b/dEUBAAAAAAAA&bo=DQRAAgAAAAADB2k!&rf=viewer_4" alt="image"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
+          
+            <a href="/tags/开源/" rel="tag"># 开源</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/Netty源码解析笔记/" rel="next" title="Netty源码解析笔记">
+                <i class="fa fa-chevron-left"></i> Netty源码解析笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/15/Spring源码学习笔记/" rel="prev" title="Spring源码学习笔记">
+                Spring源码学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg" alt="RicheyCheng">
+            
+              <p class="site-author-name" itemprop="name">RicheyCheng</p>
+              <p class="site-description motion-element" itemprop="description">认真生活，快乐工作</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/richeycheng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:chengxiaofuzju@gmail.com" target="_blank" title="Email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Email</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Netty的组件和设计"><span class="nav-text">1. Netty的组件和设计</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-Netty组件与网络抽象"><span class="nav-text">1.1 Netty组件与网络抽象</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-Channel、EventLoop、EventLoopGroup和Thread"><span class="nav-text">1.2  Channel、EventLoop、EventLoopGroup和Thread</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-ChannelHandler安装到ChannelPipeline的过程"><span class="nav-text">1.3 ChannelHandler安装到ChannelPipeline的过程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-4-不同事件传输方向的确定"><span class="nav-text">1.4 不同事件传输方向的确定</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext"><span class="nav-text">1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-1-相互关系"><span class="nav-text">1.5.1 相互关系</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-2-通过Channel或ChannelPipeline进行的事件传播"><span class="nav-text">1.5.2 通过Channel或ChannelPipeline进行的事件传播</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-5-3-通过ChannelHandlerContext触发的操作的事件流"><span class="nav-text">1.5.3 通过ChannelHandlerContext触发的操作的事件流</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-6-Netty中的消息流动"><span class="nav-text">1.6 Netty中的消息流动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-7-编码器和解码器"><span class="nav-text">1.7 编码器和解码器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-8-抽象类SimpleChannelInboundHandler"><span class="nav-text">1.8 抽象类SimpleChannelInboundHandler</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-9-引导"><span class="nav-text">1.9 引导</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-10-NIO选择器（Selector）"><span class="nav-text">1.10 NIO选择器（Selector）</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1-10-1-选择操作的位模式"><span class="nav-text">1.10.1 选择操作的位模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#1-10-2-选择并处理状态的变化"><span class="nav-text">1.10.2 选择并处理状态的变化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-ChannelHandler和ChannelPipeline"><span class="nav-text">2. ChannelHandler和ChannelPipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-Channel的生命周期"><span class="nav-text">2.1 Channel的生命周期</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-ChannelHandler的生命周期方法"><span class="nav-text">2.2 ChannelHandler的生命周期方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-ChannelHandlerAdapter"><span class="nav-text">2.3 ChannelHandlerAdapter</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-ChannelPipeline接口"><span class="nav-text">2.4 ChannelPipeline接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5-ChannelHandlerContext接口"><span class="nav-text">2.5 ChannelHandlerContext接口</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6-异常处理"><span class="nav-text">2.6 异常处理</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-EventLoop和线程模型"><span class="nav-text">3. EventLoop和线程模型</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-EventLoop类层次结构"><span class="nav-text">3.1 EventLoop类层次结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-EventLoop的执行逻辑"><span class="nav-text">3.2 EventLoop的执行逻辑</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-EventLoop-线程的分配"><span class="nav-text">3.3 EventLoop/线程的分配</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-2-异步传输的EventLoop分配方式"><span class="nav-text">3.3.2 异步传输的EventLoop分配方式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-2-阻塞传输的EventLoop分配方式"><span class="nav-text">3.3.2 阻塞传输的EventLoop分配方式</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-引导"><span class="nav-text">4. 引导</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-引导客户端"><span class="nav-text">4.1 引导客户端</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-引导服务器"><span class="nav-text">4.2 引导服务器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-3-从Channel引导客户端进行请求转发"><span class="nav-text">4.3 从Channel引导客户端进行请求转发</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">RicheyCheng</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

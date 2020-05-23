@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="算法与数据结构,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. 拓扑排序的定义对一个有向无环图G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为拓扑序列。 例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5,">
+<meta name="keywords" content="算法与数据结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="算法与数据结构系列-拓扑排序">
+<meta property="og:url" content="http://yoursite.com/2020/05/23/算法与数据结构系列-拓扑排序/index.html">
+<meta property="og:site_name" content="Richey&#39;s Notes">
+<meta property="og:description" content="1. 拓扑排序的定义对一个有向无环图G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为拓扑序列。 例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5,">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4">
+<meta property="og:updated_time" content="2020-05-23T12:35:05.601Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法与数据结构系列-拓扑排序">
+<meta name="twitter:description" content="1. 拓扑排序的定义对一个有向无环图G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为拓扑序列。 例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5,">
+<meta name="twitter:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/23/算法与数据结构系列-拓扑排序/">
+
+
+
+
+
+  <title>算法与数据结构系列-拓扑排序 | Richey's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Richey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">温故知新</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/23/算法与数据结构系列-拓扑排序/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="RicheyCheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">算法与数据结构系列-拓扑排序</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-23T20:32:53+08:00">
+                2020-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/算法与数据结构/" itemprop="url" rel="index">
+                    <span itemprop="name">算法与数据结构</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="1-拓扑排序的定义"><a href="#1-拓扑排序的定义" class="headerlink" title="1. 拓扑排序的定义"></a>1. 拓扑排序的定义</h1><p>对一个有向无环图G进行<strong>拓扑排序</strong>，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为<strong>拓扑序列</strong>。</p>
+<p>例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5, 3].</p>
+<p><img src="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4" alt="image"></p>
+<h1 id="2-拓扑排序的应用"><a href="#2-拓扑排序的应用" class="headerlink" title="2. 拓扑排序的应用"></a>2. 拓扑排序的应用</h1><p>狭义来讲，拓扑排序主要用来解决有向图中的依赖解析问题，可用于判断有向图中是否存在循环依赖等。</p>
+<p>拓展到非计算机应用，拓扑排序常用来确定一个依赖关系集中事物发生的顺序。例如，在日常工作中，可能会将项目拆分成A、B、C、D四个子部分来完成，但A依赖于B和D，C依赖于D。为了计算这个项目进行的顺序，可对这个关系集进行拓扑排序，得出一个线性的序列，则排在前面的任务就是需要先完成的任务。</p>
+<h1 id="3-拓扑排序的算法实现"><a href="#3-拓扑排序的算法实现" class="headerlink" title="3. 拓扑排序的算法实现"></a>3. 拓扑排序的算法实现</h1><p>首先了解一下入度和出度的概念。  </p>
+<p>对于有向图来说，顶点v的<strong>出度</strong>是指顶点v的出边条数，即从顶点v出发指向其他顶点的边的数目；顶点v的<strong>入度</strong>是指顶点v的入边条数，即从其他顶点出发，终点为v的的边的数目。</p>
+<p>了解入度和出度的概念之后，为了实现拓扑排序，可以将入度为0的顶点作为拓扑排序的起点，开始深度遍历。详细的算法步骤如下：</p>
+<ol>
+<li>初始化一个数组保存每个顶点的入度；</li>
+<li>遍历图中的每条边，将出边指向的顶点的入度加1；</li>
+<li>将入度为0的顶点入栈，开始遍历栈元素；</li>
+<li>弹出栈顶元素，遍历图的所有边，若边的起点为该顶点，则该边终点的入度减1，若终点入度为0，入栈；</li>
+<li>重复步骤4，直到弹出所有的栈元素；</li>
+<li>如果最终从栈中弹出所有的顶点，则完成拓扑排序，否则意味着当前的图不是有向无环图，不存在拓扑排序。</li>
+</ol>
+<p>算法实现如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Get topological ordering of directed graph</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> num   node number of directed graph</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> edges edges of directed graph: [0, 1] represents 0 -&gt; 1</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> topological ordering of directed graph</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">int</span>[] topologicalSort(<span class="keyword">int</span> num, <span class="keyword">int</span>[][] edges) &#123;</span><br><span class="line">    <span class="comment">// 计算入度</span></span><br><span class="line">    <span class="keyword">int</span>[] inDegree = <span class="keyword">new</span> <span class="keyword">int</span>[num];</span><br><span class="line">    Arrays.fill(inDegree, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; edges.length; ++i) &#123;</span><br><span class="line">        inDegree[edges[i][<span class="number">1</span>]]++;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 定义DFS队列</span></span><br><span class="line">    Deque&lt;Integer&gt; deque = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; num; ++i) &#123;</span><br><span class="line">        <span class="keyword">if</span> (inDegree[i] == <span class="number">0</span>) &#123;</span><br><span class="line">            deque.offer(i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 深度遍历</span></span><br><span class="line">    List&lt;Integer&gt; topoAns = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">while</span> (!deque.isEmpty()) &#123;</span><br><span class="line">        <span class="keyword">int</span> startV = deque.poll();</span><br><span class="line">        topoAns.add(startV);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; edges.length; ++i) &#123;</span><br><span class="line">            <span class="keyword">if</span> (edges[i][<span class="number">0</span>] == startV) &#123;</span><br><span class="line">                inDegree[edges[i][<span class="number">1</span>]]--;</span><br><span class="line">                <span class="keyword">if</span> (inDegree[edges[i][<span class="number">1</span>]] == <span class="number">0</span>) &#123;</span><br><span class="line">                    deque.offer(edges[i][<span class="number">1</span>]);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> topoAns.size() == num ? topoAns.stream().mapToInt(Integer::intValue).toArray() : <span class="keyword">new</span> <span class="keyword">int</span>[]&#123;&#125;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h1 id="4-经典例题"><a href="#4-经典例题" class="headerlink" title="4. 经典例题"></a>4. 经典例题</h1><p><a href="https://leetcode-cn.com/problems/course-schedule/" target="_blank" rel="noopener">Leetcode 207. Course Schedule</a></p>
+<p><a href="https://leetcode-cn.com/problems/course-schedule-ii/" target="_blank" rel="noopener">Leetcode 210. Course Schedule II</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/算法与数据结构/" rel="tag"># 算法与数据结构</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/16/Linux shell脚本攻略/" rel="next" title="Linux shell脚本攻略">
+                <i class="fa fa-chevron-left"></i> Linux shell脚本攻略
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/24/算法与数据结构系列-二叉树的遍历/" rel="prev" title="算法与数据结构系列-二叉树的遍历">
+                算法与数据结构系列-二叉树的遍历 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg" alt="RicheyCheng">
+            
+              <p class="site-author-name" itemprop="name">RicheyCheng</p>
+              <p class="site-description motion-element" itemprop="description">认真生活，快乐工作</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/richeycheng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:chengxiaofuzju@gmail.com" target="_blank" title="Email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Email</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-拓扑排序的定义"><span class="nav-text">1. 拓扑排序的定义</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-拓扑排序的应用"><span class="nav-text">2. 拓扑排序的应用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-拓扑排序的算法实现"><span class="nav-text">3. 拓扑排序的算法实现</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-经典例题"><span class="nav-text">4. 经典例题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">RicheyCheng</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

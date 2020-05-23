@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="开源,Spring,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Bean对象的创建和销毁1.1 创建Bean对象12345678910111213141516/** * doCreateBean(): * 1. createBeanInstance(): factory or constructor  // 1. 创建bean的实例 * 2. addSingletonFactory()                         // 2. 记录创建">
+<meta name="keywords" content="开源,Spring">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spring源码学习笔记">
+<meta property="og:url" content="http://yoursite.com/2019/09/15/Spring源码学习笔记/index.html">
+<meta property="og:site_name" content="Richey&#39;s Notes">
+<meta property="og:description" content="1. Bean对象的创建和销毁1.1 创建Bean对象12345678910111213141516/** * doCreateBean(): * 1. createBeanInstance(): factory or constructor  // 1. 创建bean的实例 * 2. addSingletonFactory()                         // 2. 记录创建">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-28T14:16:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spring源码学习笔记">
+<meta name="twitter:description" content="1. Bean对象的创建和销毁1.1 创建Bean对象12345678910111213141516/** * doCreateBean(): * 1. createBeanInstance(): factory or constructor  // 1. 创建bean的实例 * 2. addSingletonFactory()                         // 2. 记录创建">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/15/Spring源码学习笔记/">
+
+
+
+
+
+  <title>Spring源码学习笔记 | Richey's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Richey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">温故知新</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/Spring源码学习笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="RicheyCheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spring源码学习笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-15T21:32:45+08:00">
+                2019-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开源框架/" itemprop="url" rel="index">
+                    <span itemprop="name">开源框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="1-Bean对象的创建和销毁"><a href="#1-Bean对象的创建和销毁" class="headerlink" title="1. Bean对象的创建和销毁"></a>1. Bean对象的创建和销毁</h2><h3 id="1-1-创建Bean对象"><a href="#1-1-创建Bean对象" class="headerlink" title="1.1 创建Bean对象"></a>1.1 创建Bean对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * doCreateBean():</span></span><br><span class="line"><span class="comment"> * 1. createBeanInstance(): factory or constructor  // 1. 创建bean的实例</span></span><br><span class="line"><span class="comment"> * 2. addSingletonFactory()                         // 2. 记录创建bean的ObjectFactory</span></span><br><span class="line"><span class="comment"> * 3. populateBean()                                // 3. 属性注入</span></span><br><span class="line"><span class="comment"> * 4. initializeBean()                              // 4. 初始化bean</span></span><br><span class="line"><span class="comment"> * |-- 4-1. invokeAwareMethods() -&gt; BeanFactoryAware::setBeanFactory()                                    // 4-1. 激活Aware方法</span></span><br><span class="line"><span class="comment"> * |-- 4-2. applyBeanPostProcessorsBeforeInitialization() -&gt; processor.postProcessBeforeInitialization()  // 4-2. 处理器的应用(初始化前)</span></span><br><span class="line"><span class="comment"> *      |-- 4-2-1. ApplicationContextAwareProcessor::setApplicationContext()</span></span><br><span class="line"><span class="comment"> *      |-- 4-2-2. ServletContextAwareProcessor::setServletContext()</span></span><br><span class="line"><span class="comment"> *      |-- 4-2-3. InitDestroyAnnotationBeanPostProcessor::<span class="doctag">@PostConstruct</span></span></span><br><span class="line"><span class="comment"> * |-- 4-3. invokeInitMethods()                                                                           // 4-3. 激活自定义的init方法</span></span><br><span class="line"><span class="comment"> *      |-- 4-3-1. afterPropertiesSet()      // 4-3-1. 执行InitializingBean::afterPropertiesSet()实现的初始化业务逻辑</span></span><br><span class="line"><span class="comment"> *      |-- 4-3-2. invokeCustomInitMethod()  // 4-3-2. 执行init-method配置的方法中实现的初始化业务逻辑</span></span><br><span class="line"><span class="comment"> * |-- 4-4. applyBeanPostProcessorsAfterInitialization() -&gt; processor.postProcessAfterInitialization()    // 4-4. 处理器的应用(初始化后)</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-2-销毁Bean对象"><a href="#1-2-销毁Bean对象" class="headerlink" title="1.2 销毁Bean对象"></a>1.2 销毁Bean对象</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * AbstractApplicationContext::registerShutdownHook(): add shutdown hook, execute before JVM shutdown</span></span><br><span class="line"><span class="comment"> * AbstractApplicationContext::doClose() -&gt; destroyBeans() =&gt;</span></span><br><span class="line"><span class="comment"> * |-- DefaultListableBeanFactory::destroySingletons() =&gt;</span></span><br><span class="line"><span class="comment"> *    |-- DefaultSingletonBeanRegistry::destroySingleton() -&gt; destroyBean() =&gt;</span></span><br><span class="line"><span class="comment"> *       |-- DisposableBeanAdapter::destroy() =&gt;</span></span><br><span class="line"><span class="comment"> *          |-- 1. InitDestroyAnnotationBeanPostProcessor::postProcessBeforeDestruction() -&gt; invokeDestroyMethods() =&gt; <span class="doctag">@PreDestroy</span></span></span><br><span class="line"><span class="comment"> *          |-- 2. DisposableBean::destroy()   // 执行DisposableBean::destroy()实现的销毁逻辑</span></span><br><span class="line"><span class="comment"> *          |-- 3. invokeCustomDestroyMethod() // 执行destroy-method配置的方法中实现的销毁逻辑</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="1-3-代码示例"><a href="#1-3-代码示例" class="headerlink" title="1.3 代码示例"></a>1.3 代码示例</h3><h4 id="1-3-1-applicationContext-xml"><a href="#1-3-1-applicationContext-xml" class="headerlink" title="1.3.1 applicationContext.xml"></a>1.3.1 applicationContext.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"lifeCycleTestBean"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.bean.LifeCycleTestBean"</span> <span class="attr">init-method</span>=<span class="string">"customInit"</span> <span class="attr">destroy-method</span>=<span class="string">"customDestroy"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-2-LifeCycleTestBean-java"><a href="#1-3-2-LifeCycleTestBean-java" class="headerlink" title="1.3.2 LifeCycleTestBean.java"></a>1.3.2 LifeCycleTestBean.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.richey.spring.circle.TestA;</span><br><span class="line"><span class="keyword">import</span> com.richey.spring.circle.TestC;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.BeansException;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.BeanFactory;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.BeanFactoryAware;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.DisposableBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.InitializingBean;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContext;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationContextAware;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.ApplicationListener;</span><br><span class="line"><span class="keyword">import</span> org.springframework.context.event.ContextRefreshedEvent;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.PostConstruct;</span><br><span class="line"><span class="keyword">import</span> javax.annotation.PreDestroy;</span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LifeCycleTestBean</span> <span class="keyword">implements</span> <span class="title">ApplicationContextAware</span>, <span class="title">BeanFactoryAware</span>, <span class="title">InitializingBean</span>,</span></span><br><span class="line"><span class="class">        <span class="title">ApplicationListener</span>&lt;<span class="title">ContextRefreshedEvent</span>&gt;, <span class="title">DisposableBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// AbstractAutowireCapableBeanFactory</span></span><br><span class="line">    <span class="comment">// doCreateBean() -&gt; createBeanInstance() -&gt; instantiate()</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">LifeCycleTestBean</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"1=&gt;TestBean.TestBean(): testA = "</span> + testA);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// doCreateBean() -&gt; initializeBean() -&gt; invokeAwareMethods() =&gt; BeanFactoryAware::setBeanFactory()</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setBeanFactory</span><span class="params">(BeanFactory beanFactory)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.beanFactory = beanFactory;</span><br><span class="line">        System.out.println(String.format(<span class="string">"2=&gt;TestBean.setBeanFactory(): testA = %s, testC say: %s"</span>,</span><br><span class="line">                testA, ((TestC) <span class="keyword">this</span>.beanFactory.getBean(<span class="string">"testC"</span>)).say()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * doCreateBean() -&gt; initializeBean() -&gt; applyBeanPostProcessorsBeforeInitialization() =&gt;</span></span><br><span class="line"><span class="comment">     * ApplicationContextAwareProcessor::postProcessBeforeInitialization() -&gt; invokeAwareInterfaces() =&gt;</span></span><br><span class="line"><span class="comment">     * ApplicationContextAware::setApplicationContext()</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setApplicationContext</span><span class="params">(ApplicationContext applicationContext)</span> <span class="keyword">throws</span> BeansException </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.applicationContext = applicationContext;</span><br><span class="line">        System.out.println(String.format(<span class="string">"3=&gt;TestBean.setApplicationContext(): testA = %s, testC say: %s"</span>,</span><br><span class="line">                testA, ((TestC) <span class="keyword">this</span>.applicationContext.getBean(<span class="string">"testC"</span>)).say()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * doCreateBean() -&gt; initializeBean() -&gt; applyBeanPostProcessorsBeforeInitialization() =&gt;</span></span><br><span class="line"><span class="comment">     * InitDestroyAnnotationBeanPostProcessor::postProcessBeforeInitialization() -&gt; invokeInitMethods() =&gt;</span></span><br><span class="line"><span class="comment">     * LifecycleElement::invoke()</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@PostConstruct</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postConstruct</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"4=&gt;TestBean.postConstruct(): testA = "</span> + testA);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// doCreateBean() -&gt; initializeBean() -&gt; invokeInitMethods() =&gt; InitializingBean::afterPropertiesSet()</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"5.1=&gt;TestBean.afterPropertiesSet(): testA = "</span> + testA);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// doCreateBean() -&gt; initializeBean() -&gt; invokeInitMethods() -&gt; invokeCustomInitMethod() =&gt; Method::invoke()</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customInit</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"5.2=&gt;TestBean.customInit(): testA = "</span> + testA);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">     * AbstractApplicationContext::refresh() -&gt; finishRefresh() -&gt; publishEvent() =&gt;</span></span><br><span class="line"><span class="comment">     * SimpleApplicationEventMulticaster::multicastEvent() -&gt; invokeListener() -&gt; doInvokeListener() =&gt;</span></span><br><span class="line"><span class="comment">     * ApplicationListener::onApplicationEvent()</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onApplicationEvent</span><span class="params">(ContextRefreshedEvent event)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (event.getApplicationContext().getParent() == <span class="keyword">null</span>) &#123;</span><br><span class="line">            System.out.println(<span class="string">"6.1=&gt;TestBean.rootContext.onApplicationEvent()"</span>);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            System.out.println(<span class="string">"6.2=&gt;TestBean.onApplicationEvent()"</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">// InitDestroyAnnotationBeanPostProcessor::postProcessBeforeDestruction() -&gt; invokeDestroyMethods() =&gt; LifecycleElement::invoke()</span></span><br><span class="line">    <span class="meta">@PreDestroy</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">preDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"7.1=&gt;TestBean.preDestroy()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// DisposableBean::destroy()</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">destroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"7.2=&gt;TestBean.destroy()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// invokeCustomDestroyMethod() =&gt; Method::invoke()</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">customDestroy</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"7.3=&gt;TestBean.customDestroy()"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> ApplicationContext applicationContext;</span><br><span class="line">    <span class="keyword">private</span> BeanFactory beanFactory;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> TestA testA;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="1-3-3-Demo-java"><a href="#1-3-3-Demo-java" class="headerlink" title="1.3.3 Demo.java"></a>1.3.3 Demo.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath*:applicationContext.xml"</span>);</span><br><span class="line">((AbstractApplicationContext) context).registerShutdownHook();</span><br></pre></td></tr></table></figure>
+
+<h3 id="1-4-运行结果"><a href="#1-4-运行结果" class="headerlink" title="1.4 运行结果"></a>1.4 运行结果</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">1=&gt;TestBean.TestBean(): testA = null</span><br><span class="line">2=&gt;TestBean.setBeanFactory(): testA = com.richey.spring.circle.TestA@52045dbe, testC say: &apos;hello world&apos; printed by TestC!</span><br><span class="line">3=&gt;TestBean.setApplicationContext(): testA = com.richey.spring.circle.TestA@52045dbe, testC say: &apos;hello world&apos; printed by TestC!</span><br><span class="line">4=&gt;TestBean.postConstruct(): testA = com.richey.spring.circle.TestA@52045dbe</span><br><span class="line">5.1=&gt;TestBean.afterPropertiesSet(): testA = com.richey.spring.circle.TestA@52045dbe</span><br><span class="line">5.2=&gt;TestBean.customInit(): testA = com.richey.spring.circle.TestA@52045dbe</span><br><span class="line">6.1=&gt;TestBean.rootContext.onApplicationEvent()</span><br><span class="line">7.1=&gt;TestBean.preDestroy()</span><br><span class="line">7.2=&gt;TestBean.destroy()</span><br><span class="line">7.3=&gt;TestBean.customDestroy()</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-Resource-VS-Autowired-VS-Qualifier"><a href="#2-Resource-VS-Autowired-VS-Qualifier" class="headerlink" title="2. @Resource VS. @Autowired VS. @Qualifier"></a>2. @Resource VS. @Autowired VS. @Qualifier</h2><h3 id="2-1-使用方式"><a href="#2-1-使用方式" class="headerlink" title="2.1 使用方式"></a>2.1 使用方式</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * 1. <span class="doctag">@Resource</span>默认是按照名称来装配注入的，只有当找不到与名称匹配的bean才会按照类型来装配注入；</span></span><br><span class="line"><span class="comment"> * 2. <span class="doctag">@Autowired</span>默认是按照类型装配注入的，如果想按照名称来转配注入，则需要结合<span class="doctag">@Qualifier</span>一起使用；</span></span><br><span class="line"><span class="comment"> * 3. <span class="doctag">@Resource</span>注解是由J2EE提供，而<span class="doctag">@Autowired</span>是由Spring提供，故减少系统对spring的依赖建议使用<span class="doctag">@Resource</span>的方式；</span></span><br><span class="line"><span class="comment"> * 4. <span class="doctag">@Resource</span>和<span class="doctag">@Autowired</span>都可以书写标注在字段或者该字段的setter方法之上。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="2-2-代码示例"><a href="#2-2-代码示例" class="headerlink" title="2.2 代码示例"></a>2.2 代码示例</h3><h4 id="2-2-1-applicationContext-xml"><a href="#2-2-1-applicationContext-xml" class="headerlink" title="2.2.1 applicationContext.xml"></a>2.2.1 applicationContext.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"injectionTestBean"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.bean.InjectionTestBean"</span> /&gt;</span></span><br><span class="line"><span class="comment">&lt;!-- TestServiceA与TestServiceB均实现接口ITestService --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testServiceA"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.bean.TestServiceA"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testServiceB"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.bean.TestServiceB"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="2-2-2-InjectionTestBean-java"><a href="#2-2-2-InjectionTestBean-java" class="headerlink" title="2.2.2 InjectionTestBean.java"></a>2.2.2 InjectionTestBean.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.richey.spring.circle.TestA;</span><br><span class="line"><span class="keyword">import</span> com.richey.spring.circle.TestB;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line"><span class="keyword">import</span> org.springframework.beans.factory.annotation.Qualifier;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> javax.annotation.Resource;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">InjectionTestBean</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认按照名称匹配注入 -- (成功)</span></span><br><span class="line">    <span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> TestA testA;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 名称无法匹配注入，则按照类型匹配注入 -- (成功)</span></span><br><span class="line">    <span class="comment">// @Resource</span></span><br><span class="line">    <span class="comment">// private TestA testAaa;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 指定名称匹配，若名称匹配注入失败，则报错，不会再按照类型匹配注入 -- (失败)</span></span><br><span class="line">    <span class="comment">// @Resource(name = "testAAA")</span></span><br><span class="line">    <span class="comment">// private TestA testAAA;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 默认按照类型匹配注入，单独使用@Autowired不会使用名称匹配注入 -- (成功)</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> TestB testBBB;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 多个实现类，@Autowired根据类型无法完成匹配注入 -- (失败)</span></span><br><span class="line">    <span class="comment">// @Autowired</span></span><br><span class="line">    <span class="comment">// private ITestService testService;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 多个实现类，@Autowired结合@Qualifier，可根据类型和名称完成匹配注入 -- (成功)</span></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="meta">@Qualifier</span>(value = <span class="string">"testServiceA"</span>)</span><br><span class="line">    <span class="keyword">private</span> ITestService testService;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="3-循环依赖"><a href="#3-循环依赖" class="headerlink" title="3. 循环依赖"></a>3. 循环依赖</h2><h3 id="3-1-特点"><a href="#3-1-特点" class="headerlink" title="3.1 特点"></a>3.1 特点</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * 1. 通过构造器注入形成的循环依赖是无法解决的，无论是prototype作用域还是singleton作用域，只能抛出BeanCurrentlyInCreationException异常；</span></span><br><span class="line"><span class="comment"> * 2. 如果属性通过setter方式注入，则对于prototype作用域bean，Spring容器无法完成依赖注入，因为Spring容器不进行缓存prototype作用域的bean，因此无法提前暴露一个创建中的bean；</span></span><br><span class="line"><span class="comment"> * 3. 对于singleton作用域bean形成的循环依赖的解决方法，是在创建实例后、初始化实例前返回一个ObjectFactory用于提前暴露一个创建中的bean，并放入“当前创建bean池”，也可以通过setAllowCircularReference(false)来禁用循环引用。</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="3-2-代码示例"><a href="#3-2-代码示例" class="headerlink" title="3.2 代码示例"></a>3.2 代码示例</h3><h4 id="3-2-1-applicationContext-xml"><a href="#3-2-1-applicationContext-xml" class="headerlink" title="3.2.1 applicationContext.xml"></a>3.2.1 applicationContext.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 构造器注入（无论是singleton或prototype作用域，循环依赖失败） --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testA"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestA"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"testB"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testB"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestB"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"testC"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testC"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestC"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">constructor-arg</span> <span class="attr">index</span>=<span class="string">"0"</span> <span class="attr">ref</span>=<span class="string">"testA"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- setter注入（prototype作用域，循环依赖失败） --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testA"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestA"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testB"</span> <span class="attr">ref</span>=<span class="string">"testB"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testB"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestB"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testC"</span> <span class="attr">ref</span>=<span class="string">"testC"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testC"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestC"</span> <span class="attr">scope</span>=<span class="string">"prototype"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testA"</span> <span class="attr">ref</span>=<span class="string">"testA"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- setter注入（singleton作用域，循环依赖成功） --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testA"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestA"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testB"</span> <span class="attr">ref</span>=<span class="string">"testB"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testB"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestB"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testC"</span> <span class="attr">ref</span>=<span class="string">"testC"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"testC"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.circle.TestC"</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"testA"</span> <span class="attr">ref</span>=<span class="string">"testA"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="3-2-2-Bean对象"><a href="#3-2-2-Bean对象" class="headerlink" title="3.2.2 Bean对象"></a>3.2.2 Bean对象</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TestA.java</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestA</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 构造器注入方式（constructor-arg）必须有显式的构造方法</span></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    public TestA(TestB testB) &#123;</span></span><br><span class="line"><span class="comment">        this.testB = testB;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// setter注入方式（property）必须有setter方法</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTestB</span><span class="params">(TestB testB)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.testB = testB;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">test</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"hello"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TestB testB;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// TestB.java</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestB</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    public TestB(TestC testC) &#123;</span></span><br><span class="line"><span class="comment">        this.testC = testC;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTestC</span><span class="params">(TestC testC)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.testC = testC;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TestC testC;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">// TestC.java</span></span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">TestC</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">    public TestC(TestA testA) &#123;</span></span><br><span class="line"><span class="comment">        this.testA = testA;</span></span><br><span class="line"><span class="comment">    &#125;</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setTestA</span><span class="params">(TestA testA)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.testA = testA;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">say</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"'hello world' printed by TestC!"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> TestA testA;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="4-AbstractApplicationContext-refresh"><a href="#4-AbstractApplicationContext-refresh" class="headerlink" title="4. AbstractApplicationContext::refresh()"></a>4. AbstractApplicationContext::refresh()</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">refresh</span><span class="params">()</span> <span class="keyword">throws</span> BeansException, IllegalStateException </span>&#123;</span><br><span class="line">    <span class="keyword">synchronized</span> (<span class="keyword">this</span>.startupShutdownMonitor) &#123;</span><br><span class="line">        <span class="comment">// Prepare this context for refreshing.</span></span><br><span class="line">        <span class="comment">// 准备刷新的上下文</span></span><br><span class="line">        prepareRefresh();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Tell the subclass to refresh the internal bean factory.</span></span><br><span class="line">        <span class="comment">// 初始化BeanFactory，并进行XML文件读取</span></span><br><span class="line">        ConfigurableListableBeanFactory beanFactory = obtainFreshBeanFactory();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// Prepare the bean factory for use in this context.</span></span><br><span class="line">        <span class="comment">// 对BeanFactory进行各种功能填充，ApplicationContextAwareProcessor处理器在这里被添加到BeanFactory</span></span><br><span class="line">        prepareBeanFactory(beanFactory);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// Allows post-processing of the bean factory in context subclasses.</span></span><br><span class="line">            postProcessBeanFactory(beanFactory);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Invoke factory processors registered as beans in the context.</span></span><br><span class="line">            <span class="comment">// 激活各种BeanFactory处理器</span></span><br><span class="line">            invokeBeanFactoryPostProcessors(beanFactory);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Register bean processors that intercept bean creation.</span></span><br><span class="line">            <span class="comment">// 注册拦截Bean创建的Bean处理器，这里只是注册到初始化BeanFactory的beanPostProcessors，真正的调用时在getBean时候遍历</span></span><br><span class="line">            registerBeanPostProcessors(beanFactory);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Initialize message source for this context.</span></span><br><span class="line">            initMessageSource();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Initialize event multicaster for this context.</span></span><br><span class="line">            initApplicationEventMulticaster();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Initialize other special beans in specific context subclasses.</span></span><br><span class="line">            onRefresh();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Check for listener beans and register them.</span></span><br><span class="line">            <span class="comment">// 在所有注册的bean中查找Listener bean，注册到消息广播器中</span></span><br><span class="line">            registerListeners();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Instantiate all remaining (non-lazy-init) singletons.</span></span><br><span class="line">            <span class="comment">// 初始化剩下的单实例（非惰性的），doCreateBean()在这里被触发</span></span><br><span class="line">            finishBeanFactoryInitialization(beanFactory);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Last step: publish corresponding event.</span></span><br><span class="line">            <span class="comment">// 完成刷新过程，通知生命周期处理器LifecycleProcessor刷新过程，同时发出ContextRefreshEvent通知别人</span></span><br><span class="line">            <span class="comment">// ApplicationListener&lt;ContextRefreshedEvent&gt;::onApplicationEvent()在这里触发</span></span><br><span class="line">            finishRefresh();</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">catch</span> (BeansException ex) &#123;</span><br><span class="line">            <span class="keyword">if</span> (logger.isWarnEnabled()) &#123;</span><br><span class="line">                logger.warn(<span class="string">"Exception encountered during context initialization - "</span> +</span><br><span class="line">                        <span class="string">"cancelling refresh attempt: "</span> + ex);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Destroy already created singletons to avoid dangling resources.</span></span><br><span class="line">            destroyBeans();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Reset 'active' flag.</span></span><br><span class="line">            cancelRefresh(ex);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Propagate exception to caller.</span></span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="comment">// Reset common introspection caches in Spring's core, since we</span></span><br><span class="line">            <span class="comment">// might not ever need metadata for singleton beans anymore...</span></span><br><span class="line">            resetCommonCaches();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-Spring-AOP"><a href="#5-Spring-AOP" class="headerlink" title="5. Spring AOP"></a>5. Spring AOP</h2><h3 id="5-1-概念"><a href="#5-1-概念" class="headerlink" title="5.1 概念"></a>5.1 概念</h3><ul>
+<li>JDK动态代理：其代理对象必须是某个接口的实现，它是通过在运行期间创建一个接口的实现类来完成对目标对象的代理。</li>
+<li>CGLIB代理：实现原理类似于JDK动态代理，只是它在运行期间生成的代理对象是针对目标类扩展的子类。CGLIB是高效的代码生成包，底层是依靠ASM（开源的Java字节码编辑类库）操作字节码实现的，性能比JDK强。</li>
+<li>proxy-target-class：当该属性为true时，目标类本身被代理而不是目标类的接口，CGLIB动态代理将被创建，设置方式如下。</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 分别配置@AspectJ自动代理和CGLIB代理 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:sapectj-autoproxy</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:config</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">&lt;!-- 统一配置@AspectJ自动代理和CGLIB代理 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">aop:sapectj-autoproxy</span> <span class="attr">proxy-target-class</span>=<span class="string">"true"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>expose-proxy：有时候目标对象内部的自我调用将无法实施切面中的增强，可通过设置expose-proxy=”true”解决。</li>
+</ul>
+<p><strong>修改前：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">b</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AServiceImpl</span> <span class="keyword">implements</span> <span class="title">AService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Transactional</span>(propagation = Propagation.REQUIRED)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.b();  <span class="comment">// 注意：此处的this指向目标对象，因此调用this.b()将不会执行b事务切面，即不会执行事务增强</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional</span>(propagation = Propagation.REQUIRES_NEW)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">b</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>修改后：</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span> <span class="attr">expose-proxy</span>=<span class="string">"true"</span> /&gt;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">AService</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">a</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">b</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AServiceImpl</span> <span class="keyword">implements</span> <span class="title">AService</span> </span>&#123;</span><br><span class="line">    <span class="meta">@Transactional</span>(propagation = Propagation.REQUIRED)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">a</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        ((AService) AopContext.currentProxy()).b();</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Transactional</span>(propagation = Propagation.REQUIRES_NEW)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">b</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>Spring的依赖JDK动态代理的AOP实现其实也是用了Proxy和InvocationHandler这两个东西，在自定义InvocationHandler中需要重写3个函数。<ul>
+<li>构造函数，将代理的对象传入。</li>
+<li>invoke方法，此方法中实现了AOP增强的所有逻辑。</li>
+<li>getProxy方法，此方法返回JDK代理。</li>
+</ul>
+</li>
+<li>CGLIB动态代理使用了Enhancer类和MethodInterceptor接口，需要重写MethodInterceptor接口的intercept方法。</li>
+</ul>
+<h3 id="5-2-注意"><a href="#5-2-注意" class="headerlink" title="5.2 注意"></a>5.2 注意</h3><ul>
+<li>如果目标对象实现了接口，默认情况下会采用JDK动态代理实现AOP，也可以强制使用CGLIB动态代理实现AOP。</li>
+<li>如果目标对象没有实现接口，必须采用CGLIB代理，Spring会自动在JDK和CGLIB动态代理之间切换。</li>
+<li>JDK动态代理只能对实现了接口的类生成代理，而不能针对类。</li>
+<li>CGLIB是针对类实现代理，主要是对指定的类生成一个子类，覆盖其中的方法，因为是继承，所以该类或方法不要声明成final。</li>
+</ul>
+<h3 id="5-3-解析AOP自定义标签的关键点"><a href="#5-3-解析AOP自定义标签的关键点" class="headerlink" title="5.3 解析AOP自定义标签的关键点"></a>5.3 解析AOP自定义标签的关键点</h3><ol>
+<li>通过parseCustomElement()解析AOP自定义标签aspecj-autoproxy时，会获取该标签对应的命名空间处理器AopNamespaceHandler，并调用其init()方法。</li>
+<li>处理器AopNamespaceHandler类继承NamespaceHandlerSupport类，在init()方法中注册解析aspectj-autoproxy的解析器AspectJAutoProxyBeanDefinitionParser类。</li>
+<li>AspectJAutoProxyBeanDefinitionParser的parse()方法注册了AnnotationAwareAspectJAutoProxyCreator的BeanDefinition（包含proxy-target-class和expose-proxy属性）。</li>
+<li>AnnotationAwareAspectJAutoProxyCreator继承了AbstractAutoProxyCreator类，而AbstractAutoProxyCreator实现了BeanPostProcessor接口，当实例化bean时，会调用AnnotationAwareAspectJAutoProxyCreator继承自AbstractAutoProxyCreator类的postProcessAfterInitialization()方法。</li>
+</ol>
+<h3 id="5-4-调用步骤"><a href="#5-4-调用步骤" class="headerlink" title="5.4 调用步骤"></a>5.4 调用步骤</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * AOP的实现原理：</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 一、解析动态AOP自定义标签</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * DefaultBeanDefinitionDocumentReader::parseDefaultElement() =&gt; BeanDefinitionParserDelegate::parseCustomElement()  // 解析自定义标签</span></span><br><span class="line"><span class="comment"> * 1. BeanDefinitionParserDelegate::getNamespaceURI()   // 1. 获取命名空间URI</span></span><br><span class="line"><span class="comment"> * 2. DefaultNamespaceHandlerResolver::resolve()        // 2. 解析命名空间处理器，实例化，并调用init()方法</span></span><br><span class="line"><span class="comment"> * |-- 2-1. AopNamespaceHandler::init() -&gt; registerBeanDefinitionParser()  // 2-1. 注册aspectj-autoproxy标签的处理器AspectJAutoProxyBeanDefinitionParser</span></span><br><span class="line"><span class="comment"> * 3. NamespaceHandlerSupport::parse() -&gt; findParserForElement() =&gt; parse() -&gt; parseInternal() -&gt; doParse() =&gt; AspectJAutoProxyBeanDefinitionParser::parse()  // 3. 调用解析逻辑</span></span><br><span class="line"><span class="comment"> * |-- 3-1. AopNamespaceUtils::registerAspectJAnnotationAutoProxyCreatorIfNecessary() =&gt; AopConfigUtils::registerAspectJAnnotationAutoProxyCreatorIfNecessary()  // 3-1. 注册AnnotationAwareAspectJAutoProxyCreator</span></span><br><span class="line"><span class="comment"> * |-- 3-2. AopNamespaceUtils::useClassProxyingIfNecessary()  // 3-2. 处理proxy-target-class以及expose-proxy属性</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * 二、创建AOP代理</span></span><br><span class="line"><span class="comment"> * AnnotationAwareAspectJAutoProxyCreator继承了AbstractAutoProxyCreator类，而AbstractAutoProxyCreator实现了BeanPostProcessor接口，</span></span><br><span class="line"><span class="comment"> * 当实例化bean时，会调用AnnotationAwareAspectJAutoProxyCreator继承自AbstractAutoProxyCreator类的postProcessAfterInitialization()方法。</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * AnnotationAwareAspectJAutoProxyCreator::postProcessAfterInitialization() -&gt; wrapIfNecessary()</span></span><br><span class="line"><span class="comment"> * 1. Boolean.FALSE.equals(this.advisedBeans.get(cacheKey))                                      // 1. 判断bean是否是切面bean，如果是的话，则不需要包装，直接返回</span></span><br><span class="line"><span class="comment"> * 2. AbstractAdvisorAutoProxyCreator::getAdvicesAndAdvisorsForBean() -&gt; findEligibleAdvisors()  // 2. 获取增强器</span></span><br><span class="line"><span class="comment"> * |-- 2-1. AnnotationAwareAspectJAutoProxyCreator::findCandidateAdvisors() =&gt; BeanFactoryAspectJAdvisorsBuilder::buildAspectJAdvisors()  // 2-1. 获取增强器</span></span><br><span class="line"><span class="comment"> *     |-- 2-1-1. ReflectiveAspectJAdvisorFactory::getAdvisors() -&gt; getAdvisor()  // 2-1-1. 获取普通增强器</span></span><br><span class="line"><span class="comment"> *         |-- 2-1-1-1. ReflectiveAspectJAdvisorFactory::getPointcut()            // 2-1-1-1. 获取切点信息</span></span><br><span class="line"><span class="comment"> *         |-- 2-1-1-2. new InstantiationModelAwarePointcutAdvisorImpl()          // 2-1-1-2. 根据切点信息生成增强</span></span><br><span class="line"><span class="comment"> *     |-- 2-1-2. new SyntheticInstantiationAdvisor()                             // 2-1-2. 增加同步实例化增强器</span></span><br><span class="line"><span class="comment"> *     |-- 2-1-3. ReflectiveAspectJAdvisorFactory::getDeclareParentsAdvisor()     // 2-1-3. 获取DeclareParents注解</span></span><br><span class="line"><span class="comment"> * |-- 2-2. AbstractAdvisorAutoProxyCreator::findAdvisorsThatCanApply() =&gt; AopUtils::findAdvisorsThatCanApply() -&gt; canApply()  // 2-2. 寻找匹配的增强器</span></span><br><span class="line"><span class="comment"> * 3. AbstractAutoProxyCreator::createProxy() =&gt; ProxyFactory::getProxy()  // 3. 创建代理</span></span><br><span class="line"><span class="comment"> * |-- 3-1. ProxyCreatorSupport::createAopProxy()                          // 3-1. 创建代理</span></span><br><span class="line"><span class="comment"> *     |-- 3-1-1. DefaultAopProxyFactory::createAopProxy()                 // 3-1-1. 根据proxy-target-class配置、被代理对象是否接口实现类等信息选择代理方式（JDK动态代理或CGLIB代理）</span></span><br><span class="line"><span class="comment"> * |-- 3-2. CglibAopProxy::getProxy() / JdkDynamicAopProxy::getProxy()     // 3-2. 获取代理</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> */</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="5-5-代码示例"><a href="#5-5-代码示例" class="headerlink" title="5.5 代码示例"></a>5.5 代码示例</h3><h4 id="5-5-1-CheckAuth-java"><a href="#5-5-1-CheckAuth-java" class="headerlink" title="5.5.1 CheckAuth.java"></a>5.5.1 CheckAuth.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.aspect;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.ElementType;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Retention;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.RetentionPolicy;</span><br><span class="line"><span class="keyword">import</span> java.lang.annotation.Target;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Target</span>(value = ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(value = RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> CheckAuth &#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * test</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">required</span><span class="params">()</span> <span class="keyword">default</span> <span class="keyword">false</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-5-2-AuthAspect-java"><a href="#5-5-2-AuthAspect-java" class="headerlink" title="5.5.2 AuthAspect.java"></a>5.5.2 AuthAspect.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.aspect;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.ProceedingJoinPoint;</span><br><span class="line"><span class="keyword">import</span> org.aspectj.lang.annotation.*;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Aspect</span></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AuthAspect</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Pointcut</span>(<span class="string">"@annotation(com.richey.spring.aspect.CheckAuth)"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">authPointcut</span><span class="params">()</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Before</span>(<span class="string">"authPointcut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">beforeCheckAuth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"====&gt;before do auth check"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Around</span>(<span class="string">"authPointcut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> Object <span class="title">doCheckAuth</span><span class="params">(ProceedingJoinPoint joinPoint)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"====&gt;around before do auth check"</span>);</span><br><span class="line">        Object result = joinPoint.proceed();</span><br><span class="line">        System.out.println(<span class="string">"====&gt;around after do auth check"</span>);</span><br><span class="line">        <span class="keyword">return</span> result;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@After</span>(<span class="string">"authPointcut()"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">afterCheckAuth</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"====&gt;after do auth check"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-5-3-Person-java"><a href="#5-5-3-Person-java" class="headerlink" title="5.5.3 Person.java"></a>5.5.3 Person.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printInfo</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">printWithoutAop</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-5-4-Student-java"><a href="#5-5-4-Student-java" class="headerlink" title="5.5.4 Student.java"></a>5.5.4 Student.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.richey.spring.bean;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.richey.spring.aspect.CheckAuth;</span><br><span class="line"><span class="keyword">import</span> org.springframework.stereotype.Component;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> <span class="keyword">implements</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@CheckAuth</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printInfo</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(String.format(<span class="string">"print student info: name = %s, age = %s"</span>, getName(), getAge()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">printWithoutAop</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"print student info without aop"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h4 id="5-5-5-servlet-context-xml"><a href="#5-5-5-servlet-context-xml" class="headerlink" title="5.5.5 servlet-context.xml"></a>5.5.5 servlet-context.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version="1.0" encoding="UTF-8" ?&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">beans</span> <span class="attr">xmlns</span>=<span class="string">"http://www.springframework.org/schema/beans"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:xsi</span>=<span class="string">"http://www.w3.org/2001/XMLSchema-instance"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:aop</span>=<span class="string">"http://www.springframework.org/schema/aop"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xmlns:context</span>=<span class="string">"http://www.springframework.org/schema/context"</span></span></span><br><span class="line"><span class="tag">       <span class="attr">xsi:schemaLocation</span>=<span class="string">"http://www.springframework.org/schema/beans</span></span></span><br><span class="line"><span class="tag"><span class="string">               http://www.springframework.org/schema/beans/spring-beans.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">               http://www.springframework.org/schema/aop</span></span></span><br><span class="line"><span class="tag"><span class="string">               http://www.springframework.org/schema/aop/spring-aop-4.0.xsd</span></span></span><br><span class="line"><span class="tag"><span class="string">               http://www.springframework.org/schema/context</span></span></span><br><span class="line"><span class="tag"><span class="string">               http://www.springframework.org/schema/context/spring-context-4.0.xsd"</span>&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">aop:aspectj-autoproxy</span> /&gt;</span>  <span class="comment">&lt;!-- 通过设置proxy-target-class="true"可强制使用CGLIB动态代理 --&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">context:component-scan</span> <span class="attr">base-package</span>=<span class="string">"com.richey.spring.aspect"</span> /&gt;</span></span><br><span class="line"></span><br><span class="line">    <span class="tag">&lt;<span class="name">bean</span> <span class="attr">id</span>=<span class="string">"studentBean"</span> <span class="attr">class</span>=<span class="string">"com.richey.spring.bean.Student"</span> &gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"age"</span> <span class="attr">value</span>=<span class="string">"18"</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">value</span>=<span class="string">"cxf"</span> /&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">bean</span>&gt;</span></span><br><span class="line">    </span><br><span class="line"><span class="tag">&lt;/<span class="name">beans</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="5-5-6-Demo-java"><a href="#5-5-6-Demo-java" class="headerlink" title="5.5.6 Demo.java"></a>5.5.6 Demo.java</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Demo</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        ApplicationContext context = <span class="keyword">new</span> ClassPathXmlApplicationContext(<span class="string">"classpath*:servlet-context.xml"</span>);</span><br><span class="line"></span><br><span class="line">        Person stuProxy = (Person) context.getBean(<span class="string">"studentBean"</span>);  <span class="comment">// 实现了接口，则使用JDK动态代理。获取到的是经过包装的重新实现Person接口的对象</span></span><br><span class="line">        stuProxy.printInfo();</span><br><span class="line">        stuProxy.printWithoutAop();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/开源/" rel="tag"># 开源</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/《Netty实战》学习笔记/" rel="next" title="《Netty实战》学习笔记">
+                <i class="fa fa-chevron-left"></i> 《Netty实战》学习笔记
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/19/重构/" rel="prev" title="重构的艺术">
+                重构的艺术 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg" alt="RicheyCheng">
+            
+              <p class="site-author-name" itemprop="name">RicheyCheng</p>
+              <p class="site-description motion-element" itemprop="description">认真生活，快乐工作</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/richeycheng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:chengxiaofuzju@gmail.com" target="_blank" title="Email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Email</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-Bean对象的创建和销毁"><span class="nav-text">1. Bean对象的创建和销毁</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-创建Bean对象"><span class="nav-text">1.1 创建Bean对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-销毁Bean对象"><span class="nav-text">1.2 销毁Bean对象</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-代码示例"><span class="nav-text">1.3 代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-applicationContext-xml"><span class="nav-text">1.3.1 applicationContext.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-2-LifeCycleTestBean-java"><span class="nav-text">1.3.2 LifeCycleTestBean.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-3-Demo-java"><span class="nav-text">1.3.3 Demo.java</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-4-运行结果"><span class="nav-text">1.4 运行结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Resource-VS-Autowired-VS-Qualifier"><span class="nav-text">2. @Resource VS. @Autowired VS. @Qualifier</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-使用方式"><span class="nav-text">2.1 使用方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-代码示例"><span class="nav-text">2.2 代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-1-applicationContext-xml"><span class="nav-text">2.2.1 applicationContext.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-2-InjectionTestBean-java"><span class="nav-text">2.2.2 InjectionTestBean.java</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-循环依赖"><span class="nav-text">3. 循环依赖</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-特点"><span class="nav-text">3.1 特点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-代码示例"><span class="nav-text">3.2 代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-1-applicationContext-xml"><span class="nav-text">3.2.1 applicationContext.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-2-2-Bean对象"><span class="nav-text">3.2.2 Bean对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-AbstractApplicationContext-refresh"><span class="nav-text">4. AbstractApplicationContext::refresh()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-Spring-AOP"><span class="nav-text">5. Spring AOP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-概念"><span class="nav-text">5.1 概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-注意"><span class="nav-text">5.2 注意</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-解析AOP自定义标签的关键点"><span class="nav-text">5.3 解析AOP自定义标签的关键点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-4-调用步骤"><span class="nav-text">5.4 调用步骤</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-5-代码示例"><span class="nav-text">5.5 代码示例</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-1-CheckAuth-java"><span class="nav-text">5.5.1 CheckAuth.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-2-AuthAspect-java"><span class="nav-text">5.5.2 AuthAspect.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-3-Person-java"><span class="nav-text">5.5.3 Person.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-4-Student-java"><span class="nav-text">5.5.4 Student.java</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-5-servlet-context-xml"><span class="nav-text">5.5.5 servlet-context.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-5-6-Demo-java"><span class="nav-text">5.5.6 Demo.java</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">RicheyCheng</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

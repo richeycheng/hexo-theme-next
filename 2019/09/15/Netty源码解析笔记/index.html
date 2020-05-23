@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head><meta name="generator" content="Hexo 3.9.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Netty,开源,">
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta name="keywords" content="Netty,开源">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Netty源码解析笔记">
+<meta property="og:url" content="http://yoursite.com/2019/09/15/Netty源码解析笔记/index.html">
+<meta property="og:site_name" content="Richey&#39;s Notes">
+<meta property="og:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/8eUmCuKEy9KiN.ejkkzLAaH4obJHq6U3fx1n4fqq08I!/b/dDIBAAAAAAAA&bo=jAWjA4wFowMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/AlGsak0UT6xjNRNQE9C342FbNVepqsxlT4KQRvSOm7A!/b/dDUBAAAAAAAA&bo=TAVLA0wFSwMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/zg3ClaDVVAl*4tr1JP*ESiY.mRaxjvLVpOGCK0N34Fg!/b/dDcBAAAAAAAA&bo=*QR3A*0EdwMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/42C9In7HSkdF2qbVzlPuIZ9Mzw.qui2A4h8I.xkPP1o!/b/dDQBAAAAAAAA&bo=CgV6AwoFegMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6r2gkCbS5FnyVkwjnz0PsJhoEj8zVrezomtzCP.XSx8!/b/dDUBAAAAAAAA&bo=*AQNA*wEDQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5fhNpQTJqQpFhpPq7EM566j*9Lm4VtRU3hOPJsyyIg8!/b/dDQBAAAAAAAA&bo=UwWJA1MFiQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/9up1Or8EabjBU66kIP3Hz70Qy9Gm.tyN9bPb.llu57I!/b/dFYAAAAAAAAA&bo=BgUjAwYFIwMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/vqhd62e1YTahawUNdO1HQ0fKZWECLHnteqCvQtDESJE!/b/dDQBAAAAAAAA&bo=CgY1AwoGNQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/VDF6lsMo86XLzkFD4M5wBfQHvfyRqJi*.BXotp.g0R8!/b/dDQBAAAAAAAA&bo=CAVCAwgFQgMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KpExgrFmIea7BB2*JawDoEVVTV*SCRf9ggf.Sal2.oU!/b/dDEBAAAAAAAA&bo=JQWGAyUFhgMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NGn58h2ddvim7hg7VnQNndma5hDMDJbfzXbT4FkmMYk!/b/dDQBAAAAAAAA&bo=HgYVAh4GFQIDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/a2bOoDLTUtE1KHm7K8YS0yDunlPF.6K2**3I8ruXQik!/b/dDYBAAAAAAAA&bo=EgPVARID1QEDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/OmqZxXFOntBbYnAUkPIVrRuClbTrZt*cA6Q6mRfOiWM!/b/dDYBAAAAAAAA&bo=jgLxAI4C8QADCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/yQX.Pwt8XzmKDyLfh6mr9eiRW4kyXAVCAynPueYxKbw!/b/dDUBAAAAAAAA&bo=FAWeARQFngEDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5xfFvaN7zdCHHKUs9od5PXKxrOmliV0NvD0GiEu3r.I!/b/dDQBAAAAAAAA&bo=vQHyAL0B8gADCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6FOBNngkRu10EuwN3k3lw*mNroAlLcYkpAELiswM8hY!/b/dDABAAAAAAAA&bo=jwVAA48FQAMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ZLTpOXjSBdX6mXo6txJjOxv2FDOuimfJ.wHrlhxTK*s!/b/dDUBAAAAAAAA&bo=oAX7AqAF.wIDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/M*WuhlNRQdlLdaWCFtrRGR5lrTR21JFh351cy06zoos!/b/dFYBAAAAAAAA&bo=*gUMA*4FDAMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/9xEybyPjWiuz6reEN5X8Jz6FzpChS7rbzh6EhgOKaz8!/b/dGEBAAAAAAAA&bo=DAWAAtwF5wIDCZs!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/eIsyDGVXL8SycElYnwGLirt4JtidIFfxwQhV2vnPqZ8!/b/dDUBAAAAAAAA&bo=FgZvAxYGbwMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/wMZKTHi70WyySJ*CjDDNrsu6PjXDURE5DTt1zaxpYOE!/b/dDMBAAAAAAAA&bo=hgWAAkAG1AIDCb0!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/zN.pCd.R92pxGaOMqVf4KZg7tmXwuqcr3Xb4FptjouU!/b/dC8BAAAAAAAA&bo=CwZfAwsGXwMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/XFcmTdRH..B9UyI9n.juoXq17ZIBW0adn8BMr6qjcQQ!/b/dDEBAAAAAAAA&bo=UAWAArIFrgIDCeA!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KvCiTL2QN7YEMIsUGaB7WGeZ7GKbdwy0SNfYQx5eefg!/b/dC0BAAAAAAAA&bo=QgWAAskFwAIDCec!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/H59erIxr8Bfvwyrr*.eCx4EyWIOb8JlEA1oFJ8I0JUo!/b/dDYBAAAAAAAA&bo=dAUVA3QFFQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/K8CE5n3mhiMohNPEpVPb7jAoWHjhCyWQR.XyJeetAnI!/b/dPMAAAAAAAAA&bo=6wX3AusF9wIDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/MqnJC72Dq74KYpJwL*HtVLqyFz5e8owTvxYBm90kIqo!/b/dDcBAAAAAAAA&bo=WwZIA1sGSAMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/dCBbaGm9*UVCtYqgzAt4C2MJrvkm6rupcVdOcPMheJE!/b/dDQBAAAAAAAA&bo=1wQ9A9cEPQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/BNM5nVgx8FDyKBkktUwVcRHGUwo6PhW88Mt1WMUMi7U!/b/dDcBAAAAAAAA&bo=kAVVA5AFVQMDCSw!&rf=viewer_4">
+<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/sP**Z0iPXG7vmCrllJlwfeEndjyQp9UcrefTElROXaM!/b/dC0BAAAAAAAA&bo=pwVIA6cFSAMDCSw!&rf=viewer_4">
+<meta property="og:updated_time" content="2019-09-15T13:20:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Netty源码解析笔记">
+<meta name="twitter:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta name="twitter:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/09/15/Netty源码解析笔记/">
+
+
+
+
+
+  <title>Netty源码解析笔记 | Richey's Notes</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Richey's Notes</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">温故知新</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br>
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            归档
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/15/Netty源码解析笔记/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="RicheyCheng">
+      <meta itemprop="description" content>
+      <meta itemprop="image" content="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Richey's Notes">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Netty源码解析笔记</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-15T21:18:10+08:00">
+                2019-09-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/开源框架/" itemprop="url" rel="index">
+                    <span itemprop="name">开源框架</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="1-Netty服务端启动过程"><a href="#1-Netty服务端启动过程" class="headerlink" title="1. Netty服务端启动过程"></a>1. Netty服务端启动过程</h4><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-1-创建服务器Channel"><a href="#1-1-创建服务器Channel" class="headerlink" title="1.1 创建服务器Channel"></a>1.1 创建服务器Channel</h5><p>调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。</p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/8eUmCuKEy9KiN.ejkkzLAaH4obJHq6U3fx1n4fqq08I!/b/dDIBAAAAAAAA&bo=jAWjA4wFowMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-2-初始化Channel"><a href="#1-2-初始化Channel" class="headerlink" title="1.2 初始化Channel"></a>1.2 初始化Channel</h5><p>初始化服务端Channel，最主要的过程是为服务端Channel添加连接处理器。</p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/AlGsak0UT6xjNRNQE9C342FbNVepqsxlT4KQRvSOm7A!/b/dDUBAAAAAAAA&bo=TAVLA0wFSwMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-3-注册Selector"><a href="#1-3-注册Selector" class="headerlink" title="1.3 注册Selector"></a>1.3 注册Selector</h5><p>将JDK底层的Channel注册到事件轮询器Selector，将netty服务端Channel作为attachment绑定到JDK底层的服务端Channel。</p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/zg3ClaDVVAl*4tr1JP*ESiY.mRaxjvLVpOGCK0N34Fg!/b/dDcBAAAAAAAA&bo=*QR3A*0EdwMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="1-4-端口绑定"><a href="#1-4-端口绑定" class="headerlink" title="1.4 端口绑定"></a>1.4 端口绑定</h5><p>调用JDK底层api实现本地端口的监听，向Selector注册OP_ACCEPT事件。  </p>
+<ul>
+<li>端口绑定之后会触发pipeline的ChannelActive事件(pipeline.fireChannelActive())，该事件从HeadContext触发，HeadContext将该事件向前传播之后会调用readIfIsAutoRead()，该方法会触发一个READ事件，该事件通过层层调用，最后调用服务端发Channel的beginRead()方法，该方法最终完成向Selector注册ACCEPT事件。</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/42C9In7HSkdF2qbVzlPuIZ9Mzw.qui2A4h8I.xkPP1o!/b/dDQBAAAAAAAA&bo=CgV6AwoFegMDCSw!&rf=viewer_4" alt="image"></p>
+<h4 id="2-NioEventLoop"><a href="#2-NioEventLoop" class="headerlink" title="2. NioEventLoop"></a>2. NioEventLoop</h4><h5 id="2-1-NioEventLoop的创建"><a href="#2-1-NioEventLoop的创建" class="headerlink" title="2.1 NioEventLoop的创建"></a>2.1 NioEventLoop的创建</h5><ul>
+<li>在创建NioEventLoopGroup的时候，NioEventLoop被创建。</li>
+<li>当不传参数时，默认会创建[2*CPU核数]个NioEventLoop，每个NioEventLoop都是由一个特定的线程选择器Chooser进行线程的分配，而Chooser也会根据NioEventLoop的个数做逻辑优化。</li>
+<li>每个NioEventLoop在创建的时候会创建一个Selector和一个定时任务队列，并将自身的线程创建器executor配置为NioEventLoopGroup的线程创建器。创建Selector的时候，netty会通过反射的方式，用数组实现替换Selector中两个HashSet的数据结构。</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6r2gkCbS5FnyVkwjnz0PsJhoEj8zVrezomtzCP.XSx8!/b/dDUBAAAAAAAA&bo=*AQNA*wEDQMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="2-1-1-ThreadPerTaskExecutor"><a href="#2-1-1-ThreadPerTaskExecutor" class="headerlink" title="2.1.1 ThreadPerTaskExecutor"></a>2.1.1 ThreadPerTaskExecutor</h6><ul>
+<li>每次执行任务都会创建一个线程实体</li>
+<li>NioEventLoop线程命令规则：nioEventLoop-{poolID}-{eventLoopID}</li>
+</ul>
+<h6 id="2-1-2-newChild"><a href="#2-1-2-newChild" class="headerlink" title="2.1.2 newChild()"></a>2.1.2 newChild()</h6><ul>
+<li>保存线程执行器ThreadPerTaskExecutor</li>
+<li>创建一个MpscQueue</li>
+<li>创建一个selector</li>
+</ul>
+<h5 id="2-2-NioEventLoop的启动"><a href="#2-2-NioEventLoop的启动" class="headerlink" title="2.2 NioEventLoop的启动"></a>2.2 NioEventLoop的启动</h5><ul>
+<li>NioEventLoop在首次调用execute方法的时候启动线程，该线程是FastThreadLocalThread，启动线程之后，netty会将该线程保存到成员变量，这样就能判断执行NioEventLoop逻辑的线程是否是本线程。</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5fhNpQTJqQpFhpPq7EM566j*9Lm4VtRU3hOPJsyyIg8!/b/dDQBAAAAAAAA&bo=UwWJA1MFiQMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="2-2-1-NioEventLoop启动触发器"><a href="#2-2-1-NioEventLoop启动触发器" class="headerlink" title="2.2.1 NioEventLoop启动触发器"></a>2.2.1 NioEventLoop启动触发器</h6><ul>
+<li>服务端启动绑定端口</li>
+<li>新连接接入通过chooser绑定一个NioEventLoop</li>
+</ul>
+<h5 id="2-3-NioEventLoop的执行逻辑"><a href="#2-3-NioEventLoop的执行逻辑" class="headerlink" title="2.3 NioEventLoop的执行逻辑"></a>2.3 NioEventLoop的执行逻辑</h5><ul>
+<li>NioEventLoop的执行逻辑在run()方法内，主要包括三个过程：<ul>
+<li>第一，检测IO事件；</li>
+<li>第二，处理IO事件；</li>
+<li>第三，执行任务队列。</li>
+</ul>
+</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/9up1Or8EabjBU66kIP3Hz70Qy9Gm.tyN9bPb.llu57I!/b/dFYAAAAAAAAA&bo=BgUjAwYFIwMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="2-3-1-检测IO事件（select-方法）"><a href="#2-3-1-检测IO事件（select-方法）" class="headerlink" title="2.3.1 检测IO事件（select()方法）"></a>2.3.1 检测IO事件（select()方法）</h6><ul>
+<li>deadline以及任务穿插逻辑处理</li>
+<li>阻塞式select</li>
+<li>避免jdk空轮询的bug</li>
+</ul>
+<h6 id="2-3-2-处理IO事件（processSelectedKey-方法）"><a href="#2-3-2-处理IO事件（processSelectedKey-方法）" class="headerlink" title="2.3.2 处理IO事件（processSelectedKey()方法）"></a>2.3.2 处理IO事件（processSelectedKey()方法）</h6><ul>
+<li>selected keySet优化</li>
+<li>processSelectedKeysOptimized()</li>
+</ul>
+<h6 id="2-3-3-执行任务队列（runAllTasks-方法）"><a href="#2-3-3-执行任务队列（runAllTasks-方法）" class="headerlink" title="2.3.3 执行任务队列（runAllTasks()方法）"></a>2.3.3 执行任务队列（runAllTasks()方法）</h6><ul>
+<li>task的分类和添加</li>
+<li>任务的聚合</li>
+<li>任务的执行</li>
+</ul>
+<h5 id="2-4-常见问题"><a href="#2-4-常见问题" class="headerlink" title="2.4 常见问题"></a>2.4 常见问题</h5><h6 id="2-4-1-Netty服务端会起多少个线程？何时启动？"><a href="#2-4-1-Netty服务端会起多少个线程？何时启动？" class="headerlink" title="2.4.1 Netty服务端会起多少个线程？何时启动？"></a>2.4.1 Netty服务端会起多少个线程？何时启动？</h6><p>答案见2.1和2.2。</p>
+<h6 id="2-4-2-Netty是如何解决JDK空轮询的bug？"><a href="#2-4-2-Netty是如何解决JDK空轮询的bug？" class="headerlink" title="2.4.2 Netty是如何解决JDK空轮询的bug？"></a>2.4.2 Netty是如何解决JDK空轮询的bug？</h6><p>如果当前阻塞操作实际上并没有花固定长时间，则计为一次空轮询，当空轮询的计数达到512次，则重新创建一个Selector，并将原先Selector所有的SelectionKey复制移交到新的Selector上。</p>
+<h6 id="2-4-3-Netty是如何保证异步串行无锁化？"><a href="#2-4-3-Netty是如何保证异步串行无锁化？" class="headerlink" title="2.4.3 Netty是如何保证异步串行无锁化？"></a>2.4.3 Netty是如何保证异步串行无锁化？</h6><p>当外部线程调用NioEventLoop或Channel的方法时，通过inEventLoop()方法判断是否是EventLoop的当前线程（即成员变量thread），如果是外部线程，则将所有操作封装成一个task，放到MpseQueue里，在NioEventLoop执行逻辑的第三部分，这些task将会被逐个执行。</p>
+<h4 id="3-新连接接入"><a href="#3-新连接接入" class="headerlink" title="3. 新连接接入"></a>3. 新连接接入</h4><ul>
+<li>检测新连接</li>
+<li>为每个新连接创建NioSocketChannel</li>
+<li>为新连接分配NioEventLoop，并注册到Selector</li>
+<li>注册NioSocketChannel的读事件</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/vqhd62e1YTahawUNdO1HQ0fKZWECLHnteqCvQtDESJE!/b/dDQBAAAAAAAA&bo=CgY1AwoGNQMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="3-1-新连接的检测"><a href="#3-1-新连接的检测" class="headerlink" title="3.1 新连接的检测"></a>3.1 新连接的检测</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/VDF6lsMo86XLzkFD4M5wBfQHvfyRqJi*.BXotp.g0R8!/b/dDQBAAAAAAAA&bo=CAVCAwgFQgMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="3-2-NioSocketChannel的创建"><a href="#3-2-NioSocketChannel的创建" class="headerlink" title="3.2 NioSocketChannel的创建"></a>3.2 NioSocketChannel的创建</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KpExgrFmIea7BB2*JawDoEVVTV*SCRf9ggf.Sal2.oU!/b/dDEBAAAAAAAA&bo=JQWGAyUFhgMDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="3-3-新连接NioEventLoop的分配和selector注册"><a href="#3-3-新连接NioEventLoop的分配和selector注册" class="headerlink" title="3.3 新连接NioEventLoop的分配和selector注册"></a>3.3 新连接NioEventLoop的分配和selector注册</h5><h6 id="3-3-1-服务端Channel的pipeline的构成"><a href="#3-3-1-服务端Channel的pipeline的构成" class="headerlink" title="3.3.1 服务端Channel的pipeline的构成"></a>3.3.1 服务端Channel的pipeline的构成</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NGn58h2ddvim7hg7VnQNndma5hDMDJbfzXbT4FkmMYk!/b/dDQBAAAAAAAA&bo=HgYVAh4GFQIDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="3-3-2-ServerBootstrapAcceptor"><a href="#3-3-2-ServerBootstrapAcceptor" class="headerlink" title="3.3.2 ServerBootstrapAcceptor"></a>3.3.2 ServerBootstrapAcceptor</h6><ul>
+<li>添加childHandler</li>
+<li>添加options和attrs</li>
+<li>选择NioEventLoop并注册Selector</li>
+</ul>
+<h5 id="3-4-Channel的分类"><a href="#3-4-Channel的分类" class="headerlink" title="3.4 Channel的分类"></a>3.4 Channel的分类</h5><ul>
+<li>NioServerSocketChannel：通过反射创建</li>
+<li>NioSocketChannel：通过new()方法创建</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/a2bOoDLTUtE1KHm7K8YS0yDunlPF.6K2**3I8ruXQik!/b/dDYBAAAAAAAA&bo=EgPVARID1QEDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="3-5-常见问题"><a href="#3-5-常见问题" class="headerlink" title="3.5 常见问题"></a>3.5 常见问题</h5><h6 id="3-5-1-Netty在哪儿检测新连接接入？"><a href="#3-5-1-Netty在哪儿检测新连接接入？" class="headerlink" title="3.5.1 Netty在哪儿检测新连接接入？"></a>3.5.1 Netty在哪儿检测新连接接入？</h6><p>boss线程第一个过程轮询出ACCEPT事件，boss第二个过程通过jdk底层的accept()方法创建新的连接。</p>
+<h6 id="3-5-2-新连接是如何注册到NioEventLoop线程的？"><a href="#3-5-2-新连接是如何注册到NioEventLoop线程的？" class="headerlink" title="3.5.2 新连接是如何注册到NioEventLoop线程的？"></a>3.5.2 新连接是如何注册到NioEventLoop线程的？</h6><p>boss线程调用chooser的next()方法，拿到一个NioEventLoop，然后将该连接注册到NioEventLoop的Selector上。</p>
+<h4 id="4-pipeline"><a href="#4-pipeline" class="headerlink" title="4. pipeline"></a>4. pipeline</h4><h5 id="4-1-pipeline的初始化"><a href="#4-1-pipeline的初始化" class="headerlink" title="4.1 pipeline的初始化"></a>4.1 pipeline的初始化</h5><ul>
+<li>pipeline在创建Channel的时候被创建</li>
+<li>pipeline节点的数据结构：ChannelHandlerContext</li>
+<li>pipeline的两大哨兵：head和tail</li>
+</ul>
+<h5 id="4-2-添加删除ChannelHandler"><a href="#4-2-添加删除ChannelHandler" class="headerlink" title="4.2 添加删除ChannelHandler"></a>4.2 添加删除ChannelHandler</h5><h6 id="4-2-1-ChannelHandler类的层次结构"><a href="#4-2-1-ChannelHandler类的层次结构" class="headerlink" title="4.2.1 ChannelHandler类的层次结构"></a>4.2.1 ChannelHandler类的层次结构</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/OmqZxXFOntBbYnAUkPIVrRuClbTrZt*cA6Q6mRfOiWM!/b/dDYBAAAAAAAA&bo=jgLxAI4C8QADCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="4-2-2-添加"><a href="#4-2-2-添加" class="headerlink" title="4.2.2 添加"></a>4.2.2 添加</h6><ul>
+<li>判断是否重复添加</li>
+<li>创建节点并添加至链表（将ChannelHandler包装成ChannelHandlerContext）</li>
+<li>回调添加完成事件</li>
+</ul>
+<h6 id="4-2-3-删除"><a href="#4-2-3-删除" class="headerlink" title="4.2.3 删除"></a>4.2.3 删除</h6><ul>
+<li>找到节点</li>
+<li>链表的删除</li>
+<li>回调删除完成事件</li>
+</ul>
+<h5 id="4-3-事件和异常的传播"><a href="#4-3-事件和异常的传播" class="headerlink" title="4.3 事件和异常的传播"></a>4.3 事件和异常的传播</h5><h6 id="4-3-1-inBound事件的传播"><a href="#4-3-1-inBound事件的传播" class="headerlink" title="4.3.1 inBound事件的传播"></a>4.3.1 inBound事件的传播</h6><ul>
+<li>何为inBound事件以及ChannelInboundHandler</li>
+<li>ChannelRead事件的传播</li>
+<li>SimpleInboundHandler处理器</li>
+</ul>
+<h6 id="4-3-2-outBound事件的传播"><a href="#4-3-2-outBound事件的传播" class="headerlink" title="4.3.2 outBound事件的传播"></a>4.3.2 outBound事件的传播</h6><ul>
+<li>何为outBound事件以及ChannelOutboundHandler</li>
+<li>write事件的传播</li>
+</ul>
+<h6 id="4-3-3-异常的传播"><a href="#4-3-3-异常的传播" class="headerlink" title="4.3.3 异常的传播"></a>4.3.3 异常的传播</h6><ul>
+<li>异常的触发链</li>
+<li>异常处理的最佳实践</li>
+</ul>
+<h5 id="4-4-常见问题"><a href="#4-4-常见问题" class="headerlink" title="4.4 常见问题"></a>4.4 常见问题</h5><h6 id="4-4-1-nett如何判断ChannelHandler的类型？"><a href="#4-4-1-nett如何判断ChannelHandler的类型？" class="headerlink" title="4.4.1 nett如何判断ChannelHandler的类型？"></a>4.4.1 nett如何判断ChannelHandler的类型？</h6><p>当向pipeline添加handler时，netty会通过关键词instanceof判断该handler是inbound类型还是outbound类型，并用boolean类型标识、保存。</p>
+<h6 id="4-4-2-对于ChannelHandler的添加应该遵循什么顺序？"><a href="#4-4-2-对于ChannelHandler的添加应该遵循什么顺序？" class="headerlink" title="4.4.2 对于ChannelHandler的添加应该遵循什么顺序？"></a>4.4.2 对于ChannelHandler的添加应该遵循什么顺序？</h6><p>inbound类型事件的传播与ChannelHandler的添加顺序正相关，outbound事件的传播顺序与ChannelHandler的添加顺序逆相关。</p>
+<h6 id="4-4-3-用户手动触发事件传播，不同的触发方式有什么区别？"><a href="#4-4-3-用户手动触发事件传播，不同的触发方式有什么区别？" class="headerlink" title="4.4.3 用户手动触发事件传播，不同的触发方式有什么区别？"></a>4.4.3 用户手动触发事件传播，不同的触发方式有什么区别？</h6><p>如果通过channel触发，那么事件要么从Head节点开始传播（inbound类型），要么从Tail节点开始传播（outbound类型）；如果是在当前Handler触发，那么事件则是从当前节点开始传播。</p>
+<h4 id="5-ByteBuf"><a href="#5-ByteBuf" class="headerlink" title="5. ByteBuf"></a>5. ByteBuf</h4><h5 id="5-1-ByteBuf的结构与API"><a href="#5-1-ByteBuf的结构与API" class="headerlink" title="5.1 ByteBuf的结构与API"></a>5.1 ByteBuf的结构与API</h5><h6 id="5-1-1-ByteBuf的结构"><a href="#5-1-1-ByteBuf的结构" class="headerlink" title="5.1.1 ByteBuf的结构"></a>5.1.1 ByteBuf的结构</h6><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+-------------------+------------------+------------------+</span><br><span class="line">| discardable bytes |  readable bytes  |  writable bytes  |</span><br><span class="line">|                   |     (CONTENT)    |                  |</span><br><span class="line">+-------------------+------------------+------------------+</span><br><span class="line">|                   |                  |                  |</span><br><span class="line"><span class="number">0</span>      &lt;=      readerIndex   &lt;=   writerIndex    &lt;=    capacity</span><br></pre></td></tr></table></figure>
+
+<h6 id="4-1-2-ByteBuf-API"><a href="#4-1-2-ByteBuf-API" class="headerlink" title="4.1.2 ByteBuf API"></a>4.1.2 ByteBuf API</h6><ul>
+<li>read()：readIndex指针会向前移动</li>
+<li>write()：writeIndex指针会向前移动</li>
+<li>set()：不移动任何指针</li>
+<li>mark()：记录index指针</li>
+<li>reset()：重置index指针</li>
+</ul>
+<h5 id="5-2-ByteBuf的分类"><a href="#5-2-ByteBuf的分类" class="headerlink" title="5.2 ByteBuf的分类"></a>5.2 ByteBuf的分类</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/yQX.Pwt8XzmKDyLfh6mr9eiRW4kyXAVCAynPueYxKbw!/b/dDUBAAAAAAAA&bo=FAWeARQFngEDCSw!&rf=viewer_4" alt="image"></p>
+<ul>
+<li>Pooled和Unpooled<ul>
+<li>Unpooled直接申请内存进行分配，Pooled预先分配好一整块内存。</li>
+</ul>
+</li>
+<li>Unsafe和非Unsafe<ul>
+<li>Unsafe通过JDK Unsafe对象基于[物理内存基地址+偏移量]获取数据，非Unsafe通过数组下标或者JDK api获取数据。</li>
+</ul>
+</li>
+<li>Heap和Direct<ul>
+<li>Heap堆内存分配，基于Byte字节数组进行内存分配；Direct基于JDK direct ByteBuf 进行内存分配，该内存不受JVM控制，不参与GC，需要手动释放。</li>
+</ul>
+</li>
+</ul>
+<h5 id="5-3-ByteBufAllocator"><a href="#5-3-ByteBufAllocator" class="headerlink" title="5.3 ByteBufAllocator"></a>5.3 ByteBufAllocator</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5xfFvaN7zdCHHKUs9od5PXKxrOmliV0NvD0GiEu3r.I!/b/dDQBAAAAAAAA&bo=vQHyAL0B8gADCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="5-4-PooledByteBufAllocator"><a href="#5-4-PooledByteBufAllocator" class="headerlink" title="5.4 PooledByteBufAllocator"></a>5.4 PooledByteBufAllocator</h5><ul>
+<li>拿到线程局部缓存PoolThreadCache</li>
+<li>在线程局部缓存的Arean上进行内存分配<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6FOBNngkRu10EuwN3k3lw*mNroAlLcYkpAELiswM8hY!/b/dDABAAAAAAAA&bo=jwVAA48FQAMDCSw!&rf=viewer_4" alt="image"></li>
+</ul>
+<h5 id="5-5-directArean分配direct内存的流程"><a href="#5-5-directArean分配direct内存的流程" class="headerlink" title="5.5 directArean分配direct内存的流程"></a>5.5 directArean分配direct内存的流程</h5><ul>
+<li>从对象池里面拿到PooledByteBuf进行复用</li>
+<li>从缓存上进行内存分配</li>
+<li>从内存堆里进行内存分配</li>
+</ul>
+<h5 id="5-6-内存规格"><a href="#5-6-内存规格" class="headerlink" title="5.6 内存规格"></a>5.6 内存规格</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ZLTpOXjSBdX6mXo6txJjOxv2FDOuimfJ.wHrlhxTK*s!/b/dDUBAAAAAAAA&bo=oAX7AqAF.wIDCSw!&rf=viewer_4" alt="image"></p>
+<h5 id="5-7-缓存数据结构"><a href="#5-7-缓存数据结构" class="headerlink" title="5.7 缓存数据结构"></a>5.7 缓存数据结构</h5><ul>
+<li>netty中所有内存是以Chunk为单位进行分配的。</li>
+<li>handler指向唯一一段连续的内存。</li>
+</ul>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/M*WuhlNRQdlLdaWCFtrRGR5lrTR21JFh351cy06zoos!/b/dFYBAAAAAAAA&bo=*gUMA*4FDAMDCSw!&rf=viewer_4" alt="image"></p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/9xEybyPjWiuz6reEN5X8Jz6FzpChS7rbzh6EhgOKaz8!/b/dGEBAAAAAAAA&bo=DAWAAtwF5wIDCZs!&rf=viewer_4" alt="image"></p>
+<h5 id="5-8-命中缓存的分配流程"><a href="#5-8-命中缓存的分配流程" class="headerlink" title="5.8 命中缓存的分配流程"></a>5.8 命中缓存的分配流程</h5><ul>
+<li>找到对应size的MemoryRegionCache</li>
+<li>从queue中弹出一个entry给ByteBuf初始化</li>
+<li>将弹出的entry扔到对象池进行复用</li>
+</ul>
+<h5 id="5-9-Arean-Chunk-Page-Subpage"><a href="#5-9-Arean-Chunk-Page-Subpage" class="headerlink" title="5.9 Arean/Chunk/Page/Subpage"></a>5.9 Arean/Chunk/Page/Subpage</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/eIsyDGVXL8SycElYnwGLirt4JtidIFfxwQhV2vnPqZ8!/b/dDUBAAAAAAAA&bo=FgZvAxYGbwMDCSw!&rf=viewer_4" alt="image"></p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/wMZKTHi70WyySJ*CjDDNrsu6PjXDURE5DTt1zaxpYOE!/b/dDMBAAAAAAAA&bo=hgWAAkAG1AIDCb0!&rf=viewer_4" alt="image"></p>
+<h5 id="5-10-Page级别的内存分配"><a href="#5-10-Page级别的内存分配" class="headerlink" title="5.10 Page级别的内存分配"></a>5.10 Page级别的内存分配</h5><p>基于完全二叉树的标记进行连续内存的分配。</p>
+<ul>
+<li>尝试在现有Chunk上进行分配</li>
+<li>创建一个Chunk进行内存分配</li>
+<li>初始化PooledByteBuf</li>
+</ul>
+<h5 id="5-11-Subpage级别的内存分配"><a href="#5-11-Subpage级别的内存分配" class="headerlink" title="5.11 Subpage级别的内存分配"></a>5.11 Subpage级别的内存分配</h5><p>找到一个Page，按照子Page大小进行划分，最后通过位图的方式进行内存分配。</p>
+<ul>
+<li>定位一个Subpage对象</li>
+<li>初始化Subpage</li>
+<li>初始化PooledByteBuf</li>
+</ul>
+<h5 id="5-12-常见问题"><a href="#5-12-常见问题" class="headerlink" title="5.12 常见问题"></a>5.12 常见问题</h5><h6 id="5-12-1-内存的类型有哪些？"><a href="#5-12-1-内存的类型有哪些？" class="headerlink" title="5.12.1 内存的类型有哪些？"></a>5.12.1 内存的类型有哪些？</h6><h6 id="5-12-2-如何减少多线程内存分配之间的竞争？"><a href="#5-12-2-如何减少多线程内存分配之间的竞争？" class="headerlink" title="5.12.2 如何减少多线程内存分配之间的竞争？"></a>5.12.2 如何减少多线程内存分配之间的竞争？</h6><h6 id="5-12-3-不同大小的内存是如何进行分配的？"><a href="#5-12-3-不同大小的内存是如何进行分配的？" class="headerlink" title="5.12.3 不同大小的内存是如何进行分配的？"></a>5.12.3 不同大小的内存是如何进行分配的？</h6><h4 id="6-编解码"><a href="#6-编解码" class="headerlink" title="6. 编解码"></a>6. 编解码</h4><h5 id="6-1-编解码流程"><a href="#6-1-编解码流程" class="headerlink" title="6.1 编解码流程"></a>6.1 编解码流程</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/zN.pCd.R92pxGaOMqVf4KZg7tmXwuqcr3Xb4FptjouU!/b/dC8BAAAAAAAA&bo=CwZfAwsGXwMDCSw!&rf=viewer_4" alt="image"></p>
+<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/XFcmTdRH..B9UyI9n.juoXq17ZIBW0adn8BMr6qjcQQ!/b/dDEBAAAAAAAA&bo=UAWAArIFrgIDCeA!&rf=viewer_4" alt="image"></p>
+<h5 id="6-2-解码步骤"><a href="#6-2-解码步骤" class="headerlink" title="6.2 解码步骤"></a>6.2 解码步骤</h5><ul>
+<li>累加字节流</li>
+<li>调用子类的decode方法进行解析</li>
+<li>将解析到ByteBuf向下传播</li>
+</ul>
+<h5 id="6-3-writeAndFlush"><a href="#6-3-writeAndFlush" class="headerlink" title="6.3 writeAndFlush"></a>6.3 writeAndFlush</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KvCiTL2QN7YEMIsUGaB7WGeZ7GKbdwy0SNfYQx5eefg!/b/dC0BAAAAAAAA&bo=QgWAAskFwAIDCec!&rf=viewer_4" alt="image"></p>
+<h6 id="6-3-1-写buffer队列"><a href="#6-3-1-写buffer队列" class="headerlink" title="6.3.1 写buffer队列"></a>6.3.1 写buffer队列</h6><ul>
+<li>direct化ByteBuf</li>
+<li>插入写队列</li>
+<li>设置写状态</li>
+</ul>
+<h6 id="6-3-2-刷新buffer队列"><a href="#6-3-2-刷新buffer队列" class="headerlink" title="6.3.2 刷新buffer队列"></a>6.3.2 刷新buffer队列</h6><ul>
+<li>添加刷新标志并设置写状态</li>
+<li>遍历buffer队列，过滤ByteBuf</li>
+<li>调用JDK底层api进行自旋写</li>
+</ul>
+<h4 id="7-性能优化工具类"><a href="#7-性能优化工具类" class="headerlink" title="7. 性能优化工具类"></a>7. 性能优化工具类</h4><h5 id="7-1-FastThreadLocal"><a href="#7-1-FastThreadLocal" class="headerlink" title="7.1 FastThreadLocal"></a>7.1 FastThreadLocal</h5><h6 id="7-1-FastThreadLocal的实现机制"><a href="#7-1-FastThreadLocal的实现机制" class="headerlink" title="7.1 FastThreadLocal的实现机制"></a>7.1 FastThreadLocal的实现机制</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/H59erIxr8Bfvwyrr*.eCx4EyWIOb8JlEA1oFJ8I0JUo!/b/dDYBAAAAAAAA&bo=dAUVA3QFFQMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="7-2-获取ThreadLocalMap的方式"><a href="#7-2-获取ThreadLocalMap的方式" class="headerlink" title="7.2 获取ThreadLocalMap的方式"></a>7.2 获取ThreadLocalMap的方式</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/K8CE5n3mhiMohNPEpVPb7jAoWHjhCyWQR.XyJeetAnI!/b/dPMAAAAAAAAA&bo=6wX3AusF9wIDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="7-3-FastThreadLocal的get-实现"><a href="#7-3-FastThreadLocal的get-实现" class="headerlink" title="7.3 FastThreadLocal的get()实现"></a>7.3 FastThreadLocal的get()实现</h6><ul>
+<li>获取ThreadLocalMap</li>
+<li>直接通过索引取出对象</li>
+<li>初始化</li>
+</ul>
+<h6 id="7-4-FastThreadLocal的set-实现"><a href="#7-4-FastThreadLocal的set-实现" class="headerlink" title="7.4 FastThreadLocal的set()实现"></a>7.4 FastThreadLocal的set()实现</h6><ul>
+<li>获取ThreadLocalMap</li>
+<li>直接通过索引set对象</li>
+<li>remove对象</li>
+</ul>
+<h5 id="7-2-Recycler"><a href="#7-2-Recycler" class="headerlink" title="7.2 Recycler"></a>7.2 Recycler</h5><h6 id="7-2-1-Recycler的创建"><a href="#7-2-1-Recycler的创建" class="headerlink" title="7.2.1 Recycler的创建"></a>7.2.1 Recycler的创建</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/MqnJC72Dq74KYpJwL*HtVLqyFz5e8owTvxYBm90kIqo!/b/dDcBAAAAAAAA&bo=WwZIA1sGSAMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="7-2-2-WeakOrderQueue结构"><a href="#7-2-2-WeakOrderQueue结构" class="headerlink" title="7.2.2 WeakOrderQueue结构"></a>7.2.2 WeakOrderQueue结构</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/dCBbaGm9*UVCtYqgzAt4C2MJrvkm6rupcVdOcPMheJE!/b/dDQBAAAAAAAA&bo=1wQ9A9cEPQMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="7-2-3-Stack与WeakOrderQueue"><a href="#7-2-3-Stack与WeakOrderQueue" class="headerlink" title="7.2.3 Stack与WeakOrderQueue"></a>7.2.3 Stack与WeakOrderQueue</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/BNM5nVgx8FDyKBkktUwVcRHGUwo6PhW88Mt1WMUMi7U!/b/dDcBAAAAAAAA&bo=kAVVA5AFVQMDCSw!&rf=viewer_4" alt="image"><br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/sP**Z0iPXG7vmCrllJlwfeEndjyQp9UcrefTElROXaM!/b/dC0BAAAAAAAA&bo=pwVIA6cFSAMDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="7-2-4-从Recycler中获取对象"><a href="#7-2-4-从Recycler中获取对象" class="headerlink" title="7.2.4 从Recycler中获取对象"></a>7.2.4 从Recycler中获取对象</h6><ul>
+<li>获取当前线程的Stack</li>
+<li>从Stack里面弹出对象</li>
+<li>创建对象并绑定到Stack</li>
+</ul>
+<h6 id="7-2-5-异线程回收对象"><a href="#7-2-5-异线程回收对象" class="headerlink" title="7.2.5 异线程回收对象"></a>7.2.5 异线程回收对象</h6><ul>
+<li>获取WeakOrderQueue</li>
+<li>创建WeakOrderQueue</li>
+<li>将对象追加到WeakOrderQueue</li>
+</ul>
+<h4 id="8-设计模式在Netty中的应用"><a href="#8-设计模式在Netty中的应用" class="headerlink" title="8. 设计模式在Netty中的应用"></a>8. 设计模式在Netty中的应用</h4><h5 id="8-1-单例模式"><a href="#8-1-单例模式" class="headerlink" title="8.1 单例模式"></a>8.1 单例模式</h5><h6 id="1）-规则"><a href="#1）-规则" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>一个类全局只有一个对象</li>
+<li>延迟创建</li>
+<li>避免线程安全问题</li>
+</ul>
+<h6 id="2）示例类"><a href="#2）示例类" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>ReadTimeoutException</li>
+<li>MqttEncoder</li>
+</ul>
+<h5 id="8-2-策略模式"><a href="#8-2-策略模式" class="headerlink" title="8.2 策略模式"></a>8.2 策略模式</h5><h6 id="1）-规则-1"><a href="#1）-规则-1" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>封装一系列可相互替换的算法家族</li>
+<li>动态选择某个策略</li>
+</ul>
+<h6 id="2）示例类-1"><a href="#2）示例类-1" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>DefaultEventExecutorChooserFactory#newChooser(EventExecutor[])</li>
+</ul>
+<h5 id="8-3-装饰者模式"><a href="#8-3-装饰者模式" class="headerlink" title="8.3 装饰者模式"></a>8.3 装饰者模式</h5><h6 id="1）-规则-2"><a href="#1）-规则-2" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>装饰者和被装饰者继承同一个接口</li>
+<li>装饰者给被装饰者动态修改行为</li>
+</ul>
+<h6 id="2）示例类-2"><a href="#2）示例类-2" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>WrappedByteBuf / UnreleasableByteBuf</li>
+</ul>
+<h5 id="8-4-观察者模式"><a href="#8-4-观察者模式" class="headerlink" title="8.4 观察者模式"></a>8.4 观察者模式</h5><h6 id="1）-规则-3"><a href="#1）-规则-3" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>观察者和被观察者</li>
+<li>观察者订阅消息，被观察者发布消息</li>
+<li>订阅则能收到，取消订阅则收不到</li>
+</ul>
+<h6 id="2）示例类-3"><a href="#2）示例类-3" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>ChannelFuture / ChannelFuture#addListener()</li>
+</ul>
+<h5 id="8-5-迭代器模式"><a href="#8-5-迭代器模式" class="headerlink" title="8.5 迭代器模式"></a>8.5 迭代器模式</h5><h6 id="1）-规则-4"><a href="#1）-规则-4" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>迭代器接口</li>
+<li>对容器里面的各个对象进行访问</li>
+</ul>
+<h6 id="2）示例类-4"><a href="#2）示例类-4" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>CompositeByteBuf</li>
+</ul>
+<h5 id="8-6-责任链模式"><a href="#8-6-责任链模式" class="headerlink" title="8.6 责任链模式"></a>8.6 责任链模式</h5><h6 id="1）-规则-5"><a href="#1）-规则-5" class="headerlink" title="1） 规则"></a>1） 规则</h6><ul>
+<li>责任处理器接口</li>
+<li>创建链，添加删除责任处理器接口</li>
+<li>上下文</li>
+<li>责任终止机制</li>
+</ul>
+<h6 id="2）示例类-5"><a href="#2）示例类-5" class="headerlink" title="2）示例类"></a>2）示例类</h6><ul>
+<li>ChannelHandler / ChannelPipeline / ChannelHandlerContext</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Netty/" rel="tag"># Netty</a>
+          
+            <a href="/tags/开源/" rel="tag"># 开源</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/15/JDK并发包/" rel="next" title="JDK并发包">
+                <i class="fa fa-chevron-left"></i> JDK并发包
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/09/15/《Netty实战》学习笔记/" rel="prev" title="《Netty实战》学习笔记">
+                《Netty实战》学习笔记 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image" src="http://ww3.sinaimg.cn/mw690/eab689f0jw8f12gq1h4q0j20ig0igjsh.jpg" alt="RicheyCheng">
+            
+              <p class="site-author-name" itemprop="name">RicheyCheng</p>
+              <p class="site-description motion-element" itemprop="description">认真生活，快乐工作</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/richeycheng" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:chengxiaofuzju@gmail.com" target="_blank" title="Email">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>Email</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-Netty服务端启动过程"><span class="nav-text">1. Netty服务端启动过程</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-1-创建服务器Channel"><span class="nav-text">1.1 创建服务器Channel</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-2-初始化Channel"><span class="nav-text">1.2 初始化Channel</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-3-注册Selector"><span class="nav-text">1.3 注册Selector</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#1-4-端口绑定"><span class="nav-text">1.4 端口绑定</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-NioEventLoop"><span class="nav-text">2. NioEventLoop</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1-NioEventLoop的创建"><span class="nav-text">2.1 NioEventLoop的创建</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-1-ThreadPerTaskExecutor"><span class="nav-text">2.1.1 ThreadPerTaskExecutor</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-1-2-newChild"><span class="nav-text">2.1.2 newChild()</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2-NioEventLoop的启动"><span class="nav-text">2.2 NioEventLoop的启动</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-2-1-NioEventLoop启动触发器"><span class="nav-text">2.2.1 NioEventLoop启动触发器</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3-NioEventLoop的执行逻辑"><span class="nav-text">2.3 NioEventLoop的执行逻辑</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-3-1-检测IO事件（select-方法）"><span class="nav-text">2.3.1 检测IO事件（select()方法）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-3-2-处理IO事件（processSelectedKey-方法）"><span class="nav-text">2.3.2 处理IO事件（processSelectedKey()方法）</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-3-3-执行任务队列（runAllTasks-方法）"><span class="nav-text">2.3.3 执行任务队列（runAllTasks()方法）</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4-常见问题"><span class="nav-text">2.4 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#2-4-1-Netty服务端会起多少个线程？何时启动？"><span class="nav-text">2.4.1 Netty服务端会起多少个线程？何时启动？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-4-2-Netty是如何解决JDK空轮询的bug？"><span class="nav-text">2.4.2 Netty是如何解决JDK空轮询的bug？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2-4-3-Netty是如何保证异步串行无锁化？"><span class="nav-text">2.4.3 Netty是如何保证异步串行无锁化？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-新连接接入"><span class="nav-text">3. 新连接接入</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#3-1-新连接的检测"><span class="nav-text">3.1 新连接的检测</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-2-NioSocketChannel的创建"><span class="nav-text">3.2 NioSocketChannel的创建</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-3-新连接NioEventLoop的分配和selector注册"><span class="nav-text">3.3 新连接NioEventLoop的分配和selector注册</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-1-服务端Channel的pipeline的构成"><span class="nav-text">3.3.1 服务端Channel的pipeline的构成</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-3-2-ServerBootstrapAcceptor"><span class="nav-text">3.3.2 ServerBootstrapAcceptor</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-4-Channel的分类"><span class="nav-text">3.4 Channel的分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-5-常见问题"><span class="nav-text">3.5 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#3-5-1-Netty在哪儿检测新连接接入？"><span class="nav-text">3.5.1 Netty在哪儿检测新连接接入？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#3-5-2-新连接是如何注册到NioEventLoop线程的？"><span class="nav-text">3.5.2 新连接是如何注册到NioEventLoop线程的？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-pipeline"><span class="nav-text">4. pipeline</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#4-1-pipeline的初始化"><span class="nav-text">4.1 pipeline的初始化</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-2-添加删除ChannelHandler"><span class="nav-text">4.2 添加删除ChannelHandler</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-1-ChannelHandler类的层次结构"><span class="nav-text">4.2.1 ChannelHandler类的层次结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-2-添加"><span class="nav-text">4.2.2 添加</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-2-3-删除"><span class="nav-text">4.2.3 删除</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-3-事件和异常的传播"><span class="nav-text">4.3 事件和异常的传播</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-1-inBound事件的传播"><span class="nav-text">4.3.1 inBound事件的传播</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-2-outBound事件的传播"><span class="nav-text">4.3.2 outBound事件的传播</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-3-3-异常的传播"><span class="nav-text">4.3.3 异常的传播</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-4-常见问题"><span class="nav-text">4.4 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#4-4-1-nett如何判断ChannelHandler的类型？"><span class="nav-text">4.4.1 nett如何判断ChannelHandler的类型？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-4-2-对于ChannelHandler的添加应该遵循什么顺序？"><span class="nav-text">4.4.2 对于ChannelHandler的添加应该遵循什么顺序？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-4-3-用户手动触发事件传播，不同的触发方式有什么区别？"><span class="nav-text">4.4.3 用户手动触发事件传播，不同的触发方式有什么区别？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#5-ByteBuf"><span class="nav-text">5. ByteBuf</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#5-1-ByteBuf的结构与API"><span class="nav-text">5.1 ByteBuf的结构与API</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#5-1-1-ByteBuf的结构"><span class="nav-text">5.1.1 ByteBuf的结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#4-1-2-ByteBuf-API"><span class="nav-text">4.1.2 ByteBuf API</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-2-ByteBuf的分类"><span class="nav-text">5.2 ByteBuf的分类</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-3-ByteBufAllocator"><span class="nav-text">5.3 ByteBufAllocator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-4-PooledByteBufAllocator"><span class="nav-text">5.4 PooledByteBufAllocator</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-5-directArean分配direct内存的流程"><span class="nav-text">5.5 directArean分配direct内存的流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-6-内存规格"><span class="nav-text">5.6 内存规格</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-7-缓存数据结构"><span class="nav-text">5.7 缓存数据结构</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-8-命中缓存的分配流程"><span class="nav-text">5.8 命中缓存的分配流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-9-Arean-Chunk-Page-Subpage"><span class="nav-text">5.9 Arean/Chunk/Page/Subpage</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-10-Page级别的内存分配"><span class="nav-text">5.10 Page级别的内存分配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-11-Subpage级别的内存分配"><span class="nav-text">5.11 Subpage级别的内存分配</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-12-常见问题"><span class="nav-text">5.12 常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#5-12-1-内存的类型有哪些？"><span class="nav-text">5.12.1 内存的类型有哪些？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-12-2-如何减少多线程内存分配之间的竞争？"><span class="nav-text">5.12.2 如何减少多线程内存分配之间的竞争？</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#5-12-3-不同大小的内存是如何进行分配的？"><span class="nav-text">5.12.3 不同大小的内存是如何进行分配的？</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-编解码"><span class="nav-text">6. 编解码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#6-1-编解码流程"><span class="nav-text">6.1 编解码流程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-2-解码步骤"><span class="nav-text">6.2 解码步骤</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-3-writeAndFlush"><span class="nav-text">6.3 writeAndFlush</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#6-3-1-写buffer队列"><span class="nav-text">6.3.1 写buffer队列</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#6-3-2-刷新buffer队列"><span class="nav-text">6.3.2 刷新buffer队列</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#7-性能优化工具类"><span class="nav-text">7. 性能优化工具类</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#7-1-FastThreadLocal"><span class="nav-text">7.1 FastThreadLocal</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#7-1-FastThreadLocal的实现机制"><span class="nav-text">7.1 FastThreadLocal的实现机制</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-获取ThreadLocalMap的方式"><span class="nav-text">7.2 获取ThreadLocalMap的方式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-3-FastThreadLocal的get-实现"><span class="nav-text">7.3 FastThreadLocal的get()实现</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-4-FastThreadLocal的set-实现"><span class="nav-text">7.4 FastThreadLocal的set()实现</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-2-Recycler"><span class="nav-text">7.2 Recycler</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-1-Recycler的创建"><span class="nav-text">7.2.1 Recycler的创建</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-2-WeakOrderQueue结构"><span class="nav-text">7.2.2 WeakOrderQueue结构</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-3-Stack与WeakOrderQueue"><span class="nav-text">7.2.3 Stack与WeakOrderQueue</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-4-从Recycler中获取对象"><span class="nav-text">7.2.4 从Recycler中获取对象</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#7-2-5-异线程回收对象"><span class="nav-text">7.2.5 异线程回收对象</span></a></li></ol></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#8-设计模式在Netty中的应用"><span class="nav-text">8. 设计模式在Netty中的应用</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#8-1-单例模式"><span class="nav-text">8.1 单例模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类"><span class="nav-text">2）示例类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-2-策略模式"><span class="nav-text">8.2 策略模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则-1"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类-1"><span class="nav-text">2）示例类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-3-装饰者模式"><span class="nav-text">8.3 装饰者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则-2"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类-2"><span class="nav-text">2）示例类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-4-观察者模式"><span class="nav-text">8.4 观察者模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则-3"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类-3"><span class="nav-text">2）示例类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-5-迭代器模式"><span class="nav-text">8.5 迭代器模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则-4"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类-4"><span class="nav-text">2）示例类</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#8-6-责任链模式"><span class="nav-text">8.6 责任链模式</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#1）-规则-5"><span class="nav-text">1） 规则</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#2）示例类-5"><span class="nav-text">2）示例类</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">RicheyCheng</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
