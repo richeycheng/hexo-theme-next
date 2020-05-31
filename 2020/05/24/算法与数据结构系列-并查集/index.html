@@ -90,7 +90,7 @@
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielq2avfKdrGPqFOk4zRHqLRn6MsjGAmF6BbGlmvdIBz8J*KBcpbDaRp*jJWRygiCsHQQ!!/b&bo=IwRFASMERQEDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*BielqwWm7Bi.OflDpGMs6uhM4YXyyEvSj6yYSTp47Nz7Oxygk6elhN1*3pU*w8Syegq5xA!!/b&bo=OQGWATkBlgEDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxm*4qeIxjUeLzNkwQU7656.f0tXHc97dcYllZb.DLOC0gcuNN1A1RTEmrrB.vDbUA!!/b&bo=CgPgAQoD4AEDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2020-05-24T09:01:55.819Z">
+<meta property="og:updated_time" content="2020-05-31T14:31:36.890Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法与数据结构系列-并查集">
 <meta name="twitter:description" content="1. 概念并查集(Disjoint-Set)是一种可以动态维护若干个不重叠的集合，并支持合并与查询两种操作的一种数据结构。 并查集主要用于解决一些元素分组的问题，例如判断无向图是否连通、增加一条边是否会产生环等。它管理一系列不相交的集合，并支持两种操作：  合并（Union）：把两个不相交的集合合并为一个集合。 查询（Find）：查询两个元素是否在同一个集合中。  如果集合中的某个元素来可以代表这">
@@ -401,9 +401,9 @@
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 查找集合根节点，并压缩路径</span></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">unifind</span><span class="params">(<span class="keyword">int</span> x)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// 查找集合根节点</span></span><br><span class="line">    <span class="keyword">int</span> root = x;</span><br><span class="line">    <span class="keyword">while</span> (root != parent[root]) &#123;</span><br><span class="line">        root = parent[root];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 压缩路径</span></span><br><span class="line">    <span class="keyword">while</span> (x != root) &#123;</span><br><span class="line">        <span class="keyword">int</span> parentOfX = parent[x];</span><br><span class="line">        parent[x] = root;</span><br><span class="line">        x = parentOfX;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> root;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <h1 id="3-经典例题"><a href="#3-经典例题" class="headerlink" title="3. 经典例题"></a>3. 经典例题</h1><ul>
-<li><a href="https://leetcode-cn.com/problems/number-of-islands/" target="_blank" rel="noopener">Leetcode 200. Number of Islands</a></li>
-<li><a href="https://leetcode-cn.com/problems/friend-circles/" target="_blank" rel="noopener">Leetcode 547. Friend Circles</a></li>
-<li><a href="https://leetcode-cn.com/problems/redundant-connection/" target="_blank" rel="noopener">Leetcode 684. Redundant Connection</a></li>
+<li><a href="https://leetcode-cn.com/problems/number-of-islands/" target="_blank" rel="noopener">Leetcode 200. 岛屿数量</a></li>
+<li><a href="https://leetcode-cn.com/problems/friend-circles/" target="_blank" rel="noopener">Leetcode 547. 朋友圈</a></li>
+<li><a href="https://leetcode-cn.com/problems/redundant-connection/" target="_blank" rel="noopener">Leetcode 684. 冗余连接</a></li>
 </ul>
 
       
