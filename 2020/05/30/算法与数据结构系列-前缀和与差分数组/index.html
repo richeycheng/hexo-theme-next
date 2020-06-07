@@ -79,20 +79,20 @@
 
 
 
-<meta name="description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：sum[i] = sum[i-1] + a[i] 。 如果需要不断计算地数组闭区间[">
+<meta name="description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 前缀和一般用于求解连续子数组和的问题，例如：和为K的子数组、和可被K整除的子数组。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：">
 <meta name="keywords" content="算法与数据结构">
 <meta property="og:type" content="article">
 <meta property="og:title" content="算法与数据结构系列-前缀和与差分数组">
 <meta property="og:url" content="http://yoursite.com/2020/05/30/算法与数据结构系列-前缀和与差分数组/index.html">
 <meta property="og:site_name" content="Richey&#39;s Notes">
-<meta property="og:description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：sum[i] = sum[i-1] + a[i] 。 如果需要不断计算地数组闭区间[">
+<meta property="og:description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 前缀和一般用于求解连续子数组和的问题，例如：和为K的子数组、和可被K整除的子数组。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/BmgsQzVq*GNja8O.UNZvUZy0uqmexR00EMX18H34Lh8JC6iX5JvNAvsKMTTKbjZFbIQ4q2FVTabZH6MdftVKxfFxES5LPM8loUDfRlR.0Ug!/b&bo=2QIQAtkCEAIDGTw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*BielqxNpcM48Uxrs1IsGkBpOFQ*lx2bIY1l4bLwoTMEqj1Obp8cbVarGX3ikMJDAe4MkCQ!!/b&bo=lgd6BJYHegQDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2020-05-31T14:49:19.559Z">
+<meta property="og:updated_time" content="2020-06-07T03:47:38.294Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法与数据结构系列-前缀和与差分数组">
-<meta name="twitter:description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：sum[i] = sum[i-1] + a[i] 。 如果需要不断计算地数组闭区间[">
+<meta name="twitter:description" content="1. 概念前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。 前缀和一般用于求解连续子数组和的问题，例如：和为K的子数组、和可被K整除的子数组。 1.1 前缀和1.1.1 一维前缀和对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：">
 <meta name="twitter:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/BmgsQzVq*GNja8O.UNZvUZy0uqmexR00EMX18H34Lh8JC6iX5JvNAvsKMTTKbjZFbIQ4q2FVTabZH6MdftVKxfFxES5LPM8loUDfRlR.0Ug!/b&bo=2QIQAtkCEAIDGTw!&rf=viewer_4">
 
 
@@ -356,6 +356,7 @@
 
       
         <h1 id="1-概念"><a href="#1-概念" class="headerlink" title="1. 概念"></a>1. 概念</h1><p>前缀和和差分数组是对顺序表的一种灵活应用，能极大的降低区间查询的时间复杂度。</p>
+<p>前缀和一般用于求解<font color="red">连续子数组和的问题</font>，例如：和为K的子数组、和可被K整除的子数组。</p>
 <h2 id="1-1-前缀和"><a href="#1-1-前缀和" class="headerlink" title="1.1 前缀和"></a>1.1 前缀和</h2><h3 id="1-1-1-一维前缀和"><a href="#1-1-1-一维前缀和" class="headerlink" title="1.1.1 一维前缀和"></a>1.1.1 一维前缀和</h3><p>对于一个数组长度为n的数组 {a1,a2,a3,…,an}，用另外一个长度为n的数组{sum1,sum2,sum3,…,sumn}表示其前缀和数组，前缀和的第i项就是数组a前i个数的总和，即：sum[i] = sum[i-1] + a[i] 。</p>
 <p>如果需要不断计算地数组闭区间[L,R]的元素之和，则利用前缀和可以做到单次计算O(1)的时间复杂度：对于已知前缀和而言，区间[L,R]元素之和为：<strong>res = sum[R] − sum[L−1]</strong> 。</p>
 <h3 id="1-1-2-二维前缀和"><a href="#1-1-2-二维前缀和" class="headerlink" title="1.1.2 二维前缀和"></a>1.1.2 二维前缀和</h3><p>对于一个长度为n*m的二维数组，以(x1,y1)为左上角坐标和以(x2,y2)为右下角坐标的子矩阵的所有元素和，称为该数组元素的二维前缀和。</p>
