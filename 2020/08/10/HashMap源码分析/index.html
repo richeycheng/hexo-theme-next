@@ -89,7 +89,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bqQfVz5yrrGYSXMvKr.cqeEgMB*SXuidcjJAPjmiLLMeyn7vEV0ZF.eWVW5jjCYvdZxNzHXdriMHzMZXAJN8IV2PaWz7QmKKWeD7tbuXz24!/b&bo=twWAApIHUAMDCdo!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bqQfVz5yrrGYSXMvKr.cqevmhKpZ8PdivvM8QJf*ScuiWfk7Lt03qsPJAZL7wetG7KHWwUBsdxGU8A2WybMvZMeP6B3rWIgGdmMo2pKj328!/b&bo=qgTWAaoE1gEDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2020-08-10T14:47:24.030Z">
+<meta property="og:updated_time" content="2020-08-10T14:57:02.622Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HashMap源码分析">
 <meta name="twitter:description" content="1. HashMap的定义和结构1.1 HashMap的概念HashMap是一个用于存储Key-Value键值对的数据结构，每一个键值对节点用Node&amp;lt;K,V&amp;gt;表示 12345678910111213static class Node&amp;lt;K,V&amp;gt; implements Map.Entry&amp;lt;K,V&amp;gt; &amp;#123;    final int hash;    fina">
@@ -362,7 +362,7 @@
 <h2 id="1-2-HashMap的特性"><a href="#1-2-HashMap的特性" class="headerlink" title="1.2 HashMap的特性"></a>1.2 HashMap的特性</h2><p>HashMap具有如下特性：</p>
 <ul>
 <li>HashMap 是一个散列表，它存储的内容是键值对(key-value)映射</li>
-<li>HashMap的实现不是同步的，即它不是线程安全的。注意与HashTable、ConcurrentHashMap的区别</li>
+<li>HashMap的实现不是同步的，即它不是线程安全的。注意与Hashtable、ConcurrentHashMap的区别</li>
 <li>HashMap的key和value都可以为null。注意与TreeMap、ConcurrentHashMap的区别</li>
 <li>HashMap中的映射不是有序的</li>
 <li>HashMap有两个参数影响其性能：<strong>初始容量</strong>和<strong>加载因子</strong>。默认初始容量是<strong>16</strong>，加载因子是<strong>0.75</strong>。容量是哈希表中桶(Entry数组)的数量，初始容量只是哈希表在创建时的容量。加载因子是哈希表其容量自动增加的阈值（比例），当哈希表中的元素个数超出了加载因子与当前容量的乘积时，通过调用 rehash 方法将容量翻倍。</li>
