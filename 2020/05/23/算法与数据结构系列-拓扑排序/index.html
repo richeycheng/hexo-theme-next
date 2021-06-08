@@ -87,12 +87,12 @@
 <meta property="og:site_name" content="Richey&#39;s Notes">
 <meta property="og:description" content="1. 拓扑排序的定义对一个有向无环图G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为拓扑序列。 例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5,">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2020-05-31T14:37:28.553Z">
+<meta property="og:image" content="http://yoursite.com/2020/05/23/算法与数据结构系列-拓扑排序/%E6%8B%93%E6%89%91.PNG">
+<meta property="og:updated_time" content="2021-06-08T15:28:14.352Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="算法与数据结构系列-拓扑排序">
 <meta name="twitter:description" content="1. 拓扑排序的定义对一个有向无环图G进行拓扑排序，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为拓扑序列。 例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5,">
-<meta name="twitter:image" content="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4">
+<meta name="twitter:image" content="http://yoursite.com/2020/05/23/算法与数据结构系列-拓扑排序/%E6%8B%93%E6%89%91.PNG">
 
 
 
@@ -356,7 +356,7 @@
       
         <h1 id="1-拓扑排序的定义"><a href="#1-拓扑排序的定义" class="headerlink" title="1. 拓扑排序的定义"></a>1. 拓扑排序的定义</h1><p>对一个有向无环图G进行<strong>拓扑排序</strong>，是将G中所有顶点排成一个线性序列，使得图中的任意两个结点u和v，若存在一条有向边从u指向v，则在拓扑排序中u一定出现在v前面。这种满足拓扑次序(Topological Order)的线性序列也称为<strong>拓扑序列</strong>。</p>
 <p>例如下面的有向无环图，在满足上述定义的前提下，经过拓扑排序可得到满足条件的拓扑序列为[1, 2, 4, 3, 5]和[1, 2, 4, 5, 3].</p>
-<p><img src="http://m.qpic.cn/psc?/V13qyI0D3HTdcl/bhRzIL1Ek8GP*cA*Bielqxejn*9GzqfmM.*aWW3o.MIZ3azUuI5M11pTlu5as.DC3rQ6.gfFh2AhsdsW6jJOLg!!/b&bo=5AFQAeQBUAEDCSw!&rf=viewer_4" alt="image"></p>
+<p><img src="%E6%8B%93%E6%89%91.PNG" alt></p>
 <h1 id="2-拓扑排序的应用"><a href="#2-拓扑排序的应用" class="headerlink" title="2. 拓扑排序的应用"></a>2. 拓扑排序的应用</h1><p>狭义来讲，拓扑排序主要用来解决有向图中的依赖解析问题，可用于判断有向图中是否存在循环依赖等。</p>
 <p>拓展到非计算机应用，拓扑排序常用来确定一个依赖关系集中事物发生的顺序。例如，在日常工作中，可能会将项目拆分成A、B、C、D四个子部分来完成，但A依赖于B和D，C依赖于D。为了计算这个项目进行的顺序，可对这个关系集进行拓扑排序，得出一个线性的序列，则排在前面的任务就是需要先完成的任务。</p>
 <h1 id="3-拓扑排序的算法实现"><a href="#3-拓扑排序的算法实现" class="headerlink" title="3. 拓扑排序的算法实现"></a>3. 拓扑排序的算法实现</h1><p>首先了解一下入度和出度的概念。  </p>
