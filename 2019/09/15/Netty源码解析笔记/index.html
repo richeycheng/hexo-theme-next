@@ -79,13 +79,13 @@
 
 
 
-<meta name="description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta name="description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsafe、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
 <meta name="keywords" content="Netty,开源">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty源码解析笔记">
 <meta property="og:url" content="http://yoursite.com/2019/09/15/Netty源码解析笔记/index.html">
 <meta property="og:site_name" content="Richey&#39;s Notes">
-<meta property="og:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta property="og:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsafe、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/8eUmCuKEy9KiN.ejkkzLAaH4obJHq6U3fx1n4fqq08I!/b/dDIBAAAAAAAA&bo=jAWjA4wFowMDCSw!&rf=viewer_4">
@@ -118,10 +118,10 @@
 <meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/dCBbaGm9*UVCtYqgzAt4C2MJrvkm6rupcVdOcPMheJE!/b/dDQBAAAAAAAA&bo=1wQ9A9cEPQMDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/BNM5nVgx8FDyKBkktUwVcRHGUwo6PhW88Mt1WMUMi7U!/b/dDcBAAAAAAAA&bo=kAVVA5AFVQMDCSw!&rf=viewer_4">
 <meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/sP**Z0iPXG7vmCrllJlwfeEndjyQp9UcrefTElROXaM!/b/dC0BAAAAAAAA&bo=pwVIA6cFSAMDCSw!&rf=viewer_4">
-<meta property="og:updated_time" content="2019-09-15T13:20:03.000Z">
+<meta property="og:updated_time" content="2021-06-08T16:03:11.231Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty源码解析笔记">
-<meta name="twitter:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
+<meta name="twitter:description" content="1. Netty服务端启动过程 1.1 创建服务器Channel调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsafe、pipeline等）绑定在此Channel上。  1.2 初始化Channel初始化服务端Channel，最主">
 <meta name="twitter:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4">
 
 
@@ -385,7 +385,7 @@
 
       
         <h4 id="1-Netty服务端启动过程"><a href="#1-Netty服务端启动过程" class="headerlink" title="1. Netty服务端启动过程"></a>1. Netty服务端启动过程</h4><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/fereX7NY00vMDR0OSXajyOQydQqfCyyuPZvkpG*dtnA!/b/dDIBAAAAAAAA&bo=HgUpAx4FKQMDCSw!&rf=viewer_4" alt="image"></p>
-<h5 id="1-1-创建服务器Channel"><a href="#1-1-创建服务器Channel" class="headerlink" title="1.1 创建服务器Channel"></a>1.1 创建服务器Channel</h5><p>调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsfae、pipeline等）绑定在此Channel上。</p>
+<h5 id="1-1-创建服务器Channel"><a href="#1-1-创建服务器Channel" class="headerlink" title="1.1 创建服务器Channel"></a>1.1 创建服务器Channel</h5><p>调用JDK底层api创建JDK Channel（ServerSocketChannel），将其包装成netty自身的服务端Channel（NioServerSocketChannel），并创建一些基本的组件（比如unsafe、pipeline等）绑定在此Channel上。</p>
 <p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/8eUmCuKEy9KiN.ejkkzLAaH4obJHq6U3fx1n4fqq08I!/b/dDIBAAAAAAAA&bo=jAWjA4wFowMDCSw!&rf=viewer_4" alt="image"></p>
 <h5 id="1-2-初始化Channel"><a href="#1-2-初始化Channel" class="headerlink" title="1.2 初始化Channel"></a>1.2 初始化Channel</h5><p>初始化服务端Channel，最主要的过程是为服务端Channel添加连接处理器。</p>
 <p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/AlGsak0UT6xjNRNQE9C342FbNVepqsxlT4KQRvSOm7A!/b/dDUBAAAAAAAA&bo=TAVLA0wFSwMDCSw!&rf=viewer_4" alt="image"></p>
