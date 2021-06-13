@@ -87,24 +87,24 @@
 <meta property="og:site_name" content="Richey&#39;s Notes">
 <meta property="og:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/DgHmWDkSfy9k72c6wGCwSYV6SQL1ugJSpp5tXARtkUU!/b/dDQBAAAAAAAA&bo=8wMVAgAAAAADB8U!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4xpl83pLwnO*lBXOm822CnFzk7TUJ9WzcJ5hrXP90OY!/b/dDYBAAAAAAAA&bo=zAMIAswDCAIDCSw!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/SZKXEwpLJfvjerpbHzTEC6LEneCyJgAAm7gtoYd1EDw!/b/dDIBAAAAAAAA&bo=mwPvAZsD7wEDCSw!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/kl6jEp3T0dDMOJG8vhCwvw00c6up4e.JmbyUP06683I!/b/dFkAAAAAAAAA&bo=8gOFAgAAAAADB1Q!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/jVKNLuH7s2UivaSk8okFDg8QfXQGLeVpPmqfNJaaazg!/b/dDEBAAAAAAAA&bo=cwM9AQAAAAADB24!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NxdtoKReJ0MZ60K7zN9rswTNblQTIrOoa56pmsA5Xi4!/b/dDQBAAAAAAAA&bo=sAOOAwAAAAADBxw!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/tg7YHYAWL.DfPdgCMi.QtlwgfMGspLcgLx8wibNiP8Q!/b/dIMAAAAAAAAA&bo=AwTvAQAAAAADB8s!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/lqRpK4k0jHio4ZHHQoDIHffSn1Spioj8QM7hj62yt24!/b/dDcBAAAAAAAA&bo=qANAAgAAAAADB8s!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/pISS9lY3M2yeEqCt7DeH2BYyP*PgJnsPVSRZ2IN8ziw!/b/dAgBAAAAAAAA&bo=NwOrAQAAAAADB7w!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JI22R6rkIPvJsIgoYgggCgdZGRgkAYXHo41T8s8W91M!/b/dDQBAAAAAAAA&bo=nQKvAQAAAAADBxM!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Rdxh74.VK6RTrv7SHxM5W5jyCwhGe6AsPvWpFRyXI3k!/b/dDQBAAAAAAAA&bo=SwOLAQAAAAADB.A!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KMdT.wcR1RaQkGf05H0wvXY4pMW27FsZ5VkuGFWKj*U!/b/dEUBAAAAAAAA&bo=DQRAAgAAAAADB2k!&rf=viewer_4">
-<meta property="og:updated_time" content="2019-09-15T13:28:40.000Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E4%BA%8B%E4%BB%B6%E4%BC%A0%E6%92%AD%E6%B5%81%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Context%E8%A7%A6%E5%8F%91%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%B5%81.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84EventLoopGroup.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/NIO%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/ChannelHandler%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/EventLoop%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/EventLoop%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/EventLoop%E5%BC%82%E6%AD%A5%E4%BC%A0%E8%BE%93%E7%9A%84%E5%88%86%E9%85%8D%E6%96%B9%E5%BC%8F.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/EventLoop%E9%98%BB%E5%A1%9E%E5%88%86%E9%85%8D.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Bootstrap%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/ServerBootstrap%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E4%BB%8EChannel%E5%BC%95%E5%AF%BC%E5%AE%A2%E6%88%B7%E7%AB%AF.PNG">
+<meta property="og:updated_time" content="2021-06-13T08:50:39.811Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Netty实战》学习笔记">
 <meta name="twitter:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
-<meta name="twitter:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB">
 
 
 
@@ -390,9 +390,9 @@
 <p>注：实际上，ChannelPipeline就是ChannelHandler的编排顺序！</p>
 <h5 id="1-4-不同事件传输方向的确定"><a href="#1-4-不同事件传输方向的确定" class="headerlink" title="1.4 不同事件传输方向的确定"></a>1.4 不同事件传输方向的确定</h5><p>虽然ChannelInboundHandler和ChannelOutboundHandler都扩展自ChannelHandler，但是Netty能区分ChannelInboundHandler和ChannelOutboundHandler的实现，并确保数据只会在具有<strong>相同定向类型</strong>的两个ChannelHandler之间传递。</p>
 <h5 id="1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext"><a href="#1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext" class="headerlink" title="1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext"></a>1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext</h5><p>当ChannelHandler被添加到ChannelPipeline时，它将会被分配一个ChannelHandlerContext，其代表了ChannelHandler和ChannelPipeline之间的绑定。虽然这个对象可以被用于获取底层的Channel，但是它主要还是被用于写出站数据。</p>
-<h6 id="1-5-1-相互关系"><a href="#1-5-1-相互关系" class="headerlink" title="1.5.1 相互关系"></a>1.5.1 相互关系</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TggXFmcGA.HGpT8mhVcc.EDWTLCz7yV6SqTpeKtloZU!/b/dAgBAAAAAAAA&bo=eAM7AgAAAAADB2A!&rf=viewer_4" alt="image"></p>
-<h6 id="1-5-2-通过Channel或ChannelPipeline进行的事件传播"><a href="#1-5-2-通过Channel或ChannelPipeline进行的事件传播" class="headerlink" title="1.5.2 通过Channel或ChannelPipeline进行的事件传播"></a>1.5.2 通过Channel或ChannelPipeline进行的事件传播</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/DgHmWDkSfy9k72c6wGCwSYV6SQL1ugJSpp5tXARtkUU!/b/dDQBAAAAAAAA&bo=8wMVAgAAAAADB8U!&rf=viewer_4" alt="image"></p>
-<h6 id="1-5-3-通过ChannelHandlerContext触发的操作的事件流"><a href="#1-5-3-通过ChannelHandlerContext触发的操作的事件流" class="headerlink" title="1.5.3 通过ChannelHandlerContext触发的操作的事件流"></a>1.5.3 通过ChannelHandlerContext触发的操作的事件流</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4xpl83pLwnO*lBXOm822CnFzk7TUJ9WzcJ5hrXP90OY!/b/dDYBAAAAAAAA&bo=zAMIAswDCAIDCSw!&rf=viewer_4" alt="image"></p>
+<h6 id="1-5-1-相互关系"><a href="#1-5-1-相互关系" class="headerlink" title="1.5.1 相互关系"></a>1.5.1 相互关系</h6><p><img src="Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB" alt></p>
+<h6 id="1-5-2-通过Channel或ChannelPipeline进行的事件传播"><a href="#1-5-2-通过Channel或ChannelPipeline进行的事件传播" class="headerlink" title="1.5.2 通过Channel或ChannelPipeline进行的事件传播"></a>1.5.2 通过Channel或ChannelPipeline进行的事件传播</h6><p><img src="%E4%BA%8B%E4%BB%B6%E4%BC%A0%E6%92%AD%E6%B5%81%E7%A8%8B.PNG" alt></p>
+<h6 id="1-5-3-通过ChannelHandlerContext触发的操作的事件流"><a href="#1-5-3-通过ChannelHandlerContext触发的操作的事件流" class="headerlink" title="1.5.3 通过ChannelHandlerContext触发的操作的事件流"></a>1.5.3 通过ChannelHandlerContext触发的操作的事件流</h6><p><img src="Context%E8%A7%A6%E5%8F%91%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%B5%81.PNG" alt></p>
 <h5 id="1-6-Netty中的消息流动"><a href="#1-6-Netty中的消息流动" class="headerlink" title="1.6 Netty中的消息流动"></a>1.6 Netty中的消息流动</h5><p>在Netty中，有两种发送消息的方式。可以直接写到Channel中，也可以写到和ChannelHandler相关联的ChannnelHandlerContext对象中。前一种方式将会导致消息从ChannelPipeline的尾端开始流动，而后者将导致消息从ChannelPipeline中的下一个ChannelHandler开始流动。</p>
 <h5 id="1-7-编码器和解码器"><a href="#1-7-编码器和解码器" class="headerlink" title="1.7 编码器和解码器"></a>1.7 编码器和解码器</h5><ul>
 <li>涉及数据格式转换的原因是由于：网络数据总是一系列的字节。  </li>
@@ -408,7 +408,7 @@
 <li>Bootstrap用于连接到远程的主机和端口，ServerBootstrap用于绑定到一个本地端口。</li>
 <li>Bootstrap只需要一个EventLoopGroup，ServerBootstrap则需要两个。ServerBootstrap需要两个EventLoopGroup的原因是服务器需要两组不同的Channel，第一组只包含一个ServerChannel，代表服务器自身的已绑定到某个本地端口的正在监听的套接字，而第二组将包含所有已创建的用来处理传入客户端连接的Channel（每个服务器已经接受的连接都有一个Channel）。</li>
 </ul>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/SZKXEwpLJfvjerpbHzTEC6LEneCyJgAAm7gtoYd1EDw!/b/dDIBAAAAAAAA&bo=mwPvAZsD7wEDCSw!&rf=viewer_4" alt="image"></p>
+<p><img src="%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84EventLoopGroup.PNG" alt></p>
 <h5 id="1-10-NIO选择器（Selector）"><a href="#1-10-NIO选择器（Selector）" class="headerlink" title="1.10 NIO选择器（Selector）"></a>1.10 NIO选择器（Selector）</h5><ul>
 <li>选择器背后的基本概念是充当一个注册表，在那里你将可以请求在Channel的状态发生变化时得到通知。</li>
 <li>选择器运行在一个检查状态变化并对其做出相应响应的线程上，在应用程序对状态的改变做出响应之后，选择器将会被重置，并将重复这个过程。</li>
@@ -437,7 +437,7 @@
 <td>请求当可以向Channel中写更多的数据时获取通知。</td>
 </tr>
 </tbody></table>
-<h6 id="1-10-2-选择并处理状态的变化"><a href="#1-10-2-选择并处理状态的变化" class="headerlink" title="1.10.2 选择并处理状态的变化"></a>1.10.2 选择并处理状态的变化</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/kl6jEp3T0dDMOJG8vhCwvw00c6up4e.JmbyUP06683I!/b/dFkAAAAAAAAA&bo=8gOFAgAAAAADB1Q!&rf=viewer_4" alt="image"></p>
+<h6 id="1-10-2-选择并处理状态的变化"><a href="#1-10-2-选择并处理状态的变化" class="headerlink" title="1.10.2 选择并处理状态的变化"></a>1.10.2 选择并处理状态的变化</h6><p><img src="NIO%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.PNG" alt></p>
 <h4 id="2-ChannelHandler和ChannelPipeline"><a href="#2-ChannelHandler和ChannelPipeline" class="headerlink" title="2. ChannelHandler和ChannelPipeline"></a>2. ChannelHandler和ChannelPipeline</h4><h5 id="2-1-Channel的生命周期"><a href="#2-1-Channel的生命周期" class="headerlink" title="2.1 Channel的生命周期"></a>2.1 Channel的生命周期</h5><table>
 <thead>
 <tr>
@@ -483,7 +483,7 @@
 </tr>
 </tbody></table>
 <p>注意：这些方法每一个都接受一个ChannelHandlerContext参数！</p>
-<h5 id="2-3-ChannelHandlerAdapter"><a href="#2-3-ChannelHandlerAdapter" class="headerlink" title="2.3 ChannelHandlerAdapter"></a>2.3 ChannelHandlerAdapter</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/jVKNLuH7s2UivaSk8okFDg8QfXQGLeVpPmqfNJaaazg!/b/dDEBAAAAAAAA&bo=cwM9AQAAAAADB24!&rf=viewer_4" alt="image"></p>
+<h5 id="2-3-ChannelHandlerAdapter"><a href="#2-3-ChannelHandlerAdapter" class="headerlink" title="2.3 ChannelHandlerAdapter"></a>2.3 ChannelHandlerAdapter</h5><p><img src="ChannelHandler%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.PNG" alt></p>
 <ul>
 <li>ChannelHandlerAdapter类提供了实用方法isSharable()，如果其对应的实现被标注为Sharable，那么这个方法将返回true，表示它可以被添加到多个ChannelPipeline中。</li>
 <li>在ChannelInboundHandlerAdapter和ChannelOutboundHandlerAdapter中所提供的方法体调用了其相关联的ChannelHandlerContext上的等效方法，从而将事件转发到了ChannelPipeline的下一个ChannelHandler中。</li>
@@ -509,23 +509,23 @@
 <li>如果异常到达了ChannelPipeline的尾端，它将会被记录为未被处理。</li>
 <li>要自定义异常处理逻辑，需要重写exceptionCaught()方法，决定是否需要将该异常传播出去。</li>
 </ul>
-<h4 id="3-EventLoop和线程模型"><a href="#3-EventLoop和线程模型" class="headerlink" title="3. EventLoop和线程模型"></a>3. EventLoop和线程模型</h4><h5 id="3-1-EventLoop类层次结构"><a href="#3-1-EventLoop类层次结构" class="headerlink" title="3.1 EventLoop类层次结构"></a>3.1 EventLoop类层次结构</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/NxdtoKReJ0MZ60K7zN9rswTNblQTIrOoa56pmsA5Xi4!/b/dDQBAAAAAAAA&bo=sAOOAwAAAAADBxw!&rf=viewer_4" alt="image"></p>
+<h4 id="3-EventLoop和线程模型"><a href="#3-EventLoop和线程模型" class="headerlink" title="3. EventLoop和线程模型"></a>3. EventLoop和线程模型</h4><h5 id="3-1-EventLoop类层次结构"><a href="#3-1-EventLoop类层次结构" class="headerlink" title="3.1 EventLoop类层次结构"></a>3.1 EventLoop类层次结构</h5><p><img src="EventLoop%E7%B1%BB%E5%B1%82%E6%AC%A1%E7%BB%93%E6%9E%84.PNG" alt></p>
 <ul>
 <li>在该模型中，EventLoop将由一个永远都不会改变的Thread驱动，同时任务（Runnable或者Callable）可以直接提交给EventLoop实现，以立即执行或者调度执行。</li>
 <li>根据配置和可用核心的不同，可能会创建多个EventLoop实例用以优化资源的使用，并且单个EventLoop可能会被指派用于服务多个Channel。</li>
 <li>事件/任务的执行顺序是以先进先出FIFO的顺序执行的。</li>
 </ul>
-<h5 id="3-2-EventLoop的执行逻辑"><a href="#3-2-EventLoop的执行逻辑" class="headerlink" title="3.2 EventLoop的执行逻辑"></a>3.2 EventLoop的执行逻辑</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/tg7YHYAWL.DfPdgCMi.QtlwgfMGspLcgLx8wibNiP8Q!/b/dIMAAAAAAAAA&bo=AwTvAQAAAAADB8s!&rf=viewer_4" alt="image"></p>
+<h5 id="3-2-EventLoop的执行逻辑"><a href="#3-2-EventLoop的执行逻辑" class="headerlink" title="3.2 EventLoop的执行逻辑"></a>3.2 EventLoop的执行逻辑</h5><p><img src="EventLoop%E7%9A%84%E6%89%A7%E8%A1%8C%E9%80%BB%E8%BE%91.PNG" alt></p>
 <p>注意：每个EventLoop都有它自己的任务队列，独立于任何其他的EventLoop。</p>
-<h5 id="3-3-EventLoop-线程的分配"><a href="#3-3-EventLoop-线程的分配" class="headerlink" title="3.3 EventLoop/线程的分配"></a>3.3 EventLoop/线程的分配</h5><h6 id="3-3-2-异步传输的EventLoop分配方式"><a href="#3-3-2-异步传输的EventLoop分配方式" class="headerlink" title="3.3.2 异步传输的EventLoop分配方式"></a>3.3.2 异步传输的EventLoop分配方式</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/lqRpK4k0jHio4ZHHQoDIHffSn1Spioj8QM7hj62yt24!/b/dDcBAAAAAAAA&bo=qANAAgAAAAADB8s!&rf=viewer_4" alt="image"></p>
+<h5 id="3-3-EventLoop-线程的分配"><a href="#3-3-EventLoop-线程的分配" class="headerlink" title="3.3 EventLoop/线程的分配"></a>3.3 EventLoop/线程的分配</h5><h6 id="3-3-2-异步传输的EventLoop分配方式"><a href="#3-3-2-异步传输的EventLoop分配方式" class="headerlink" title="3.3.2 异步传输的EventLoop分配方式"></a>3.3.2 异步传输的EventLoop分配方式</h6><p><img src="EventLoop%E5%BC%82%E6%AD%A5%E4%BC%A0%E8%BE%93%E7%9A%84%E5%88%86%E9%85%8D%E6%96%B9%E5%BC%8F.PNG" alt></p>
 <ul>
 <li>EventLoopGroup负责为每个新创建的Channel分配一个EventLoop，一旦一个Channel被分配一个EventLoop，它将在它的整个生命周期中都使用这个EventLoop（以及相关联的Thread）。</li>
 <li>需要注意的是，EventLoop的分配方式对ThreadLocal的使用的影响。因为一个EventLoop通常会被用于支撑多个Channel，所以对于所有相关联的Channel来说，ThreadLocal都将是一样的。</li>
 </ul>
-<h6 id="3-3-2-阻塞传输的EventLoop分配方式"><a href="#3-3-2-阻塞传输的EventLoop分配方式" class="headerlink" title="3.3.2 阻塞传输的EventLoop分配方式"></a>3.3.2 阻塞传输的EventLoop分配方式</h6><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/pISS9lY3M2yeEqCt7DeH2BYyP*PgJnsPVSRZ2IN8ziw!/b/dAgBAAAAAAAA&bo=NwOrAQAAAAADB7w!&rf=viewer_4" alt="image"></p>
-<h4 id="4-引导"><a href="#4-引导" class="headerlink" title="4. 引导"></a>4. 引导</h4><h5 id="4-1-引导客户端"><a href="#4-1-引导客户端" class="headerlink" title="4.1 引导客户端"></a>4.1 引导客户端</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JI22R6rkIPvJsIgoYgggCgdZGRgkAYXHo41T8s8W91M!/b/dDQBAAAAAAAA&bo=nQKvAQAAAAADBxM!&rf=viewer_4" alt="image"></p>
-<h5 id="4-2-引导服务器"><a href="#4-2-引导服务器" class="headerlink" title="4.2 引导服务器"></a>4.2 引导服务器</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Rdxh74.VK6RTrv7SHxM5W5jyCwhGe6AsPvWpFRyXI3k!/b/dDQBAAAAAAAA&bo=SwOLAQAAAAADB.A!&rf=viewer_4" alt="image"></p>
-<h5 id="4-3-从Channel引导客户端进行请求转发"><a href="#4-3-从Channel引导客户端进行请求转发" class="headerlink" title="4.3 从Channel引导客户端进行请求转发"></a>4.3 从Channel引导客户端进行请求转发</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/KMdT.wcR1RaQkGf05H0wvXY4pMW27FsZ5VkuGFWKj*U!/b/dEUBAAAAAAAA&bo=DQRAAgAAAAADB2k!&rf=viewer_4" alt="image"></p>
+<h6 id="3-3-2-阻塞传输的EventLoop分配方式"><a href="#3-3-2-阻塞传输的EventLoop分配方式" class="headerlink" title="3.3.2 阻塞传输的EventLoop分配方式"></a>3.3.2 阻塞传输的EventLoop分配方式</h6><p><img src="EventLoop%E9%98%BB%E5%A1%9E%E5%88%86%E9%85%8D.PNG" alt></p>
+<h4 id="4-引导"><a href="#4-引导" class="headerlink" title="4. 引导"></a>4. 引导</h4><h5 id="4-1-引导客户端"><a href="#4-1-引导客户端" class="headerlink" title="4.1 引导客户端"></a>4.1 引导客户端</h5><p><img src="Bootstrap%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG" alt></p>
+<h5 id="4-2-引导服务器"><a href="#4-2-引导服务器" class="headerlink" title="4.2 引导服务器"></a>4.2 引导服务器</h5><p><img src="ServerBootstrap%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG" alt></p>
+<h5 id="4-3-从Channel引导客户端进行请求转发"><a href="#4-3-从Channel引导客户端进行请求转发" class="headerlink" title="4.3 从Channel引导客户端进行请求转发"></a>4.3 从Channel引导客户端进行请求转发</h5><p><img src="%E4%BB%8EChannel%E5%BC%95%E5%AF%BC%E5%AE%A2%E6%88%B7%E7%AB%AF.PNG" alt></p>
 
       
     </div>
