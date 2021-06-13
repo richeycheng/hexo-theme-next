@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/forkjoin.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/steal.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ForkJoinTask.PNG">
-<meta property="og:updated_time" content="2021-06-13T08:15:18.187Z">
+<meta property="og:updated_time" content="2021-06-13T08:19:42.190Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JDK并发包">
 <meta name="twitter:description" content="一. Lock接口1. 简介 在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而Java SE 5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。 区别：Lock接口缺少synchronized隐式获取释放锁的便捷性，却拥有了锁获取和释放的可操作性、可中">
@@ -1430,35 +1430,8 @@
 <td>不可用</td>
 <td>不可用</td>
 </tr>
-<tr>
-<td>1）抛出异常：当队列满时，如果再往队列里插入元素，会抛出IllegalStateException(“Queue full”)异常。当队列空时，从队列里获取元素会抛出NoSuchElementException异常。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>2）返回特殊值：当往队列插入元素时，会返回元素是否插入成功，成功返回true。如果是移除方法，则是从队列里取出一个元素，如果没有则返回null。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>3）一直阻塞：当阻塞队列满时，如果生产者线程往队列里put元素，队列会一直阻塞生产者线程，直到线程可用或响应中断退出。当队列空时，如果消费者线程从队列里take元素，队列会阻塞消费者线程，直到队列不为空。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td>4）超时退出：当阻塞队列满时，如果生产者线程往队列里插入元素，队列会阻塞生产者线程一段时间，如果超过了指定的时间，生产者线程就会退出。</td>
-<td></td>
-<td></td>
-<td></td>
-<td></td>
-</tr>
 </tbody></table>
+<p>1）抛出异常：当队列满时，如果再往队列里插入元素，会抛出IllegalStateException(“Queue full”)异常。当队列空时，从队列里获取元素会抛出NoSuchElementException异常。<br>2）返回特殊值：当往队列插入元素时，会返回元素是否插入成功，成功返回true。如果是移除方法，则是从队列里取出一个元素，如果没有则返回null。<br>3）一直阻塞：当阻塞队列满时，如果生产者线程往队列里put元素，队列会一直阻塞生产者线程，直到线程可用或响应中断退出。当队列空时，如果消费者线程从队列里take元素，队列会阻塞消费者线程，直到队列不为空。<br>4）超时退出：当阻塞队列满时，如果生产者线程往队列里插入元素，队列会阻塞生产者线程一段时间，如果超过了指定的时间，生产者线程就会退出。   </p>
 <h5 id="3-2-Java里的阻塞队列"><a href="#3-2-Java里的阻塞队列" class="headerlink" title="3.2 Java里的阻塞队列"></a>3.2 Java里的阻塞队列</h5><ul>
 <li>ArrayBlockingQueue  </li>
 </ul>
