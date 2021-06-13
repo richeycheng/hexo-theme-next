@@ -100,6 +100,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ThreadPoolExecutor%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%A4%E7%BA%A7%E8%B0%83%E5%BA%A6.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/Runnable%E6%8E%A5%E5%8F%A3.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/Callable%E6%8E%A5%E5%8F%A3.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheduledFutureTask%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheduledThreadPoolExecutor%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/Executor%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BD%BF%E7%94%A8.PNG">
@@ -115,7 +116,7 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/forkjoin.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/steal.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ForkJoinTask.PNG">
-<meta property="og:updated_time" content="2021-06-13T08:09:52.395Z">
+<meta property="og:updated_time" content="2021-06-13T08:15:18.187Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JDK并发包">
 <meta name="twitter:description" content="一. Lock接口1. 简介 在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而Java SE 5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。 区别：Lock接口缺少synchronized隐式获取释放锁的便捷性，却拥有了锁获取和释放的可操作性、可中">
@@ -936,7 +937,7 @@
 <p>从图中可以看出，应用程序通过Executor框架控制上层的调度；而下层的调度由操作系统内核控制，下层的调度不受应用程序的控制。</p>
 <h4 id="2-Executor框架的结构"><a href="#2-Executor框架的结构" class="headerlink" title="2. Executor框架的结构"></a>2. Executor框架的结构</h4><ul>
 <li>Executor框架的3大组成部分<br>1）<strong>任务</strong>。包括被执行任务需要实现的接口：<strong>Runnable</strong> 接口或 <strong>Callable</strong> 接口。<br>2）<strong>异步计算的结果</strong>。包括接口 <strong>Future</strong> 和实现Future接口的 <strong>FutureTask</strong> 类。<br>3）<strong>任务的执行</strong>。包括任务执行机制的核心接口 <strong>Executor</strong>，以及继承自 Executor 的 <strong>ExecutorService</strong> 接口。<br><br>Executor框架有两个关键类实现了ExecutorService接口：<strong>ThreadPoolExecutor</strong> 和<strong>ScheduledThreadPoolExecutor</strong>。<br><br>   </li>
-<li>Runnable与Callable接口<br><img src="Runnable%E6%8E%A5%E5%8F%A3.PNG" alt></li>
+<li>Runnable与Callable接口<br><img src="Runnable%E6%8E%A5%E5%8F%A3.PNG" alt><br><img src="Callable%E6%8E%A5%E5%8F%A3.PNG" alt></li>
 <li>ScheduledFutureTask的继承结构<br><img src="ScheduledFutureTask%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG" alt></li>
 <li>ScheduledThreadPoolExecutor的继承结构<br><img src="ScheduledThreadPoolExecutor%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG" alt><br>ThreadPoolExecutor是线程池的核心实现类，用来执行被提交的任务；而ScheduledThreadPoolExecutor则可以在给定的<strong>延迟</strong>后运行命令，或者<strong>定期</strong>执行命令。</li>
 </ul>
