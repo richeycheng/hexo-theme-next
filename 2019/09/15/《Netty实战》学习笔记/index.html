@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Richey&#39;s Notes">
 <meta property="og:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E4%BA%8B%E4%BB%B6%E4%BC%A0%E6%92%AD%E6%B5%81%E7%A8%8B.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Context%E8%A7%A6%E5%8F%91%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%B5%81.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E6%9C%8D%E5%8A%A1%E5%99%A8%E7%9A%84EventLoopGroup.PNG">
@@ -100,11 +100,11 @@
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Bootstrap%E5%AE%A2%E6%88%B7%E7%AB%AF%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/ServerBootstrap%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%BC%95%E5%AF%BC%E8%BF%87%E7%A8%8B.PNG">
 <meta property="og:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/%E4%BB%8EChannel%E5%BC%95%E5%AF%BC%E5%AE%A2%E6%88%B7%E7%AB%AF.PNG">
-<meta property="og:updated_time" content="2021-06-13T08:50:39.811Z">
+<meta property="og:updated_time" content="2021-06-13T08:53:54.555Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="《Netty实战》学习笔记">
 <meta name="twitter:description" content="1. Netty的组件和设计1.1 Netty组件与网络抽象 Channel —— Socket EventLoop —— 控制流、多线程处理、并发 ChannelFuture —— 异步通知 ChannelHandler —— Logic ChannelPipeline —— Logic Chain ByteBuf —— IO Bytes  1.2  Channel、EventLoop、Even">
-<meta name="twitter:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/15/《Netty实战》学习笔记/Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB.PNG">
 
 
 
@@ -390,7 +390,7 @@
 <p>注：实际上，ChannelPipeline就是ChannelHandler的编排顺序！</p>
 <h5 id="1-4-不同事件传输方向的确定"><a href="#1-4-不同事件传输方向的确定" class="headerlink" title="1.4 不同事件传输方向的确定"></a>1.4 不同事件传输方向的确定</h5><p>虽然ChannelInboundHandler和ChannelOutboundHandler都扩展自ChannelHandler，但是Netty能区分ChannelInboundHandler和ChannelOutboundHandler的实现，并确保数据只会在具有<strong>相同定向类型</strong>的两个ChannelHandler之间传递。</p>
 <h5 id="1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext"><a href="#1-5-ChannelHandler、ChannelPipeline和ChannelHandlerContext" class="headerlink" title="1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext"></a>1.5 ChannelHandler、ChannelPipeline和ChannelHandlerContext</h5><p>当ChannelHandler被添加到ChannelPipeline时，它将会被分配一个ChannelHandlerContext，其代表了ChannelHandler和ChannelPipeline之间的绑定。虽然这个对象可以被用于获取底层的Channel，但是它主要还是被用于写出站数据。</p>
-<h6 id="1-5-1-相互关系"><a href="#1-5-1-相互关系" class="headerlink" title="1.5.1 相互关系"></a>1.5.1 相互关系</h6><p><img src="Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB" alt></p>
+<h6 id="1-5-1-相互关系"><a href="#1-5-1-相互关系" class="headerlink" title="1.5.1 相互关系"></a>1.5.1 相互关系</h6><p><img src="Handler-Pipeline-Context%E7%9A%84%E5%85%B3%E7%B3%BB.PNG" alt></p>
 <h6 id="1-5-2-通过Channel或ChannelPipeline进行的事件传播"><a href="#1-5-2-通过Channel或ChannelPipeline进行的事件传播" class="headerlink" title="1.5.2 通过Channel或ChannelPipeline进行的事件传播"></a>1.5.2 通过Channel或ChannelPipeline进行的事件传播</h6><p><img src="%E4%BA%8B%E4%BB%B6%E4%BC%A0%E6%92%AD%E6%B5%81%E7%A8%8B.PNG" alt></p>
 <h6 id="1-5-3-通过ChannelHandlerContext触发的操作的事件流"><a href="#1-5-3-通过ChannelHandlerContext触发的操作的事件流" class="headerlink" title="1.5.3 通过ChannelHandlerContext触发的操作的事件流"></a>1.5.3 通过ChannelHandlerContext触发的操作的事件流</h6><p><img src="Context%E8%A7%A6%E5%8F%91%E7%9A%84%E4%BA%8B%E4%BB%B6%E6%B5%81.PNG" alt></p>
 <h5 id="1-6-Netty中的消息流动"><a href="#1-6-Netty中的消息流动" class="headerlink" title="1.6 Netty中的消息流动"></a>1.6 Netty中的消息流动</h5><p>在Netty中，有两种发送消息的方式。可以直接写到Channel中，也可以写到和ChannelHandler相关联的ChannnelHandlerContext对象中。前一种方式将会导致消息从ChannelPipeline的尾端开始流动，而后者将导致消息从ChannelPipeline中的下一个ChannelHandler开始流动。</p>
