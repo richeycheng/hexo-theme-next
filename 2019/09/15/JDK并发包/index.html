@@ -87,40 +87,39 @@
 <meta property="og:site_name" content="Richey&#39;s Notes">
 <meta property="og:description" content="一. Lock接口1. 简介 在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而Java SE 5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。 区别：Lock接口缺少synchronized隐式获取释放锁的便捷性，却拥有了锁获取和释放的可操作性、可中">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/374tzYntRSazjEs3zebhsL6lgdgVv8ilNNyIG7JyPiQ!/b/dGcBAAAAAAAA&bo=VAORAQAAAAADB.U!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5X0UTD8y5aCJe.i0Ih2ZUDBypQRrHJVwP1TEItIJ4Tc!/b/dDMBAAAAAAAA&bo=jwIYAQAAAAADB7Y!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/IQhnPaltFGuR9eCb5tft.MGN1EdFTqySVYc*5bu5Psk!/b/dEcBAAAAAAAA&bo=EwPmAAAAAAADB9Q!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/rnilPzKojpJ19i.bHLyLgiJHBNtKCboy7yB8BwzGNKc!/b/dFkAAAAAAAAA&bo=KAPGAAAAAAADB88!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ptI5Qj1.ow8pJZM5oF.37BT7.M0wTd*O57KXekvwERE!/b/dFkAAAAAAAAA&bo=DgNfAQAAAAADB3E!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/uGR*3VvFWKc*QpoMPoFawAp6GuaKESMPxit1NEGS0Y4!/b/dEMBAAAAAAAA&bo=DgPqAQAAAAADB8Q!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/eJuJKNvsFSJe4tR*hd*SWf4U2EEKn.sWhdxDsF6puAE!/b/dGEBAAAAAAAA&bo=EgOJAQAAAAADB7s!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TyWN0gxRmpc2V4B53ODQa1rIzYDO7KyRXGbpD4pUzTA!/b/dDABAAAAAAAA&bo=IgO2AQAAAAADB7Q!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/we9T8n4ySdyTNCAH.DK*nrGOZM*HyCw0esWwxEWL*ng!/b/dDMBAAAAAAAA&bo=JQMMAgAAAAADBwo!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/O8W6gHkqLeZUUD8JLYTx8YAX6RL3fBLRgBQMmTuG39Q!/b/dDIBAAAAAAAA&bo=8QLnAgAAAAADBzQ!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/1CmsOQMtldcW.l9ZVLfCMoArKxU6jQQF6hMeujm2GPw!/b/dDMBAAAAAAAA&bo=DAOqAgAAAAADB4U!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/FuDZDyiFl3PrJrkRkLKzi.zc4y*liElIZiW.sb2b2xI!/b/dDIBAAAAAAAA&bo=.gLqAgAAAAADBzI!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/xSb3XpRmb08KhWrYkrKtpWDZfEnaurboVWXl3OxfPsk!/b/dC4BAAAAAAAA&bo=swB9AAAAAAADB.w!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ldqUubUf6ijr4Pu7R*28xF181k471Gge1DXh2ya*yiI!/b/dFYAAAAAAAAA&bo=sAB.AAAAAAADB.w!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/.CQfFR2PbdbE0zltsKFnkY30ruZbYtuFpk8AKcgozUw!/b/dIMAAAAAAAAA&bo=twFzAQAAAAADB.Y!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5LbH*5T5pzSsYoHc5a.EXT0E33bYn0eHkA9luMsAUiY!/b/dDIBAAAAAAAA&bo=qQF4AQAAAAADB*M!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/MsxYpuhaUV7j4oLfZZbmmBu1yRn.zFyrH*z2EiFbXWI!/b/dDIBAAAAAAAA&bo=5wIvAgAAAAADB.o!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Py8FwuXpVhgfgeykLUjVOlNin28P9EPw5.iKd.1kl88!/b/dDEBAAAAAAAA&bo=6AJgAgAAAAADB6o!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6uSeUiqBt7noCcofzBhsQ0vIqdky3PAIJkoreyh2Nxo!/b/dGEBAAAAAAAA&bo=0gKkAQAAAAADB1c!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JJbEqKbhJXOMw0RUXG9PQ6e2KbREoBCN1VJVC8UOMcM!/b/dGcBAAAAAAAA&bo=BQMpAgAAAAADBw8!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/OBgQarKb8tVM2QutkQOCwVXiDb*BwQCl*B38JfKDOo4!/b/dDEBAAAAAAAA&bo=CQPMAQAAAAADB.U!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/CQ41TEfIee4lZgTxfNSHLe5tch.ZHMJ35e7QgNOdk.U!/b/dFkAAAAAAAAA&bo=*AJLAgAAAAADB5U!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/nRywo*QhNGuPmBeSUHPat2xngBzm6U7E6PyDh6z0wxk!/b/dFYAAAAAAAAA&bo=AgNWAgAAAAADB3c!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/UxfgMU0ci1AbDe0oLH48GVbN.sWV1O1smSKOeuwyYrU!/b/dC8BAAAAAAAA&bo=BwOeAQAAAAADB7k!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/wg7lAVSlVieF504jF*cigXn4C4nRnW7ixdxrCFhKSeE!/b/dDABAAAAAAAA&bo=CgN6AgAAAAADB1M!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/LxB.cNXe3TCEoDt8iR26yqYBL2lkomj7K2twygRQyyc!/b/dDIBAAAAAAAA&bo=FAOaAgAAAAADB60!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/xDq8KvvWe9yegRN6*.R*oWENDixoaRplKnYkcYPQ3lw!/b/dFUAAAAAAAAA&bo=GQJgAgAAAAADB1s!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/HLhVn0qE6BjtiKH1mazh4L9sdeAYJJETKNKsTXSfOjA!/b/dEABAAAAAAAA&bo=uQF*AQAAAAADB.Q!&rf=viewer_4">
-<meta property="og:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4d5YbUJl8h5NH9FE3JXMKCv1xWY9QgIINxZtQSt5sTc!/b/dGcBAAAAAAAA&bo=VAIVAQAAAAADB2A!&rf=viewer_4">
-<meta property="og:updated_time" content="2019-09-15T13:09:15.000Z">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/AQS%E6%A1%86%E6%9E%B6.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E8%AE%BE%E7%BD%AE%E5%B0%BE%E8%8A%82%E7%82%B9.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E8%AE%BE%E7%BD%AE%E9%A6%96%E8%8A%82%E7%82%B9.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E5%A4%B4%E7%BB%93%E7%82%B9%E6%8B%A5%E6%9C%89%E5%90%8C%E6%AD%A5%E7%8A%B6%E6%80%81.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E8%AF%BB%E5%86%99%E4%BD%8D%E7%9A%84%E4%BD%BF%E7%94%A8.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97%E4%B8%8E%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E5%8A%A0%E5%85%A5%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97%E5%88%B0%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/execute%E6%89%A7%E8%A1%8C%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ThreadPoolExecutor%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%A4%E7%BA%A7%E8%B0%83%E5%BA%A6.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/Runnable%E6%8E%A5%E5%8F%A3.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheduledFutureTask%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheduledThreadPoolExecutor%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/Executor%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BD%BF%E7%94%A8.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/FixedThreadPool.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/SingleThreadExexutor.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/CachedThreadPool.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/CachedThreadPool%E4%BB%BB%E5%8A%A1%E4%BC%A0%E9%80%92%E5%9B%BE.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheduledThreadPoolExecutor.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ScheuledThreadPoolExecutor%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/FutureTask%E7%8A%B6%E6%80%81%E8%BF%81%E7%A7%BB%E5%9B%BE.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/FutureTask%E7%9A%84get%E5%92%8Ccancel.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/FutureTask%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/forkjoin.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/steal.PNG">
+<meta property="og:image" content="http://yoursite.com/2019/09/15/JDK并发包/ForkJoinTask.PNG">
+<meta property="og:updated_time" content="2021-06-13T08:09:52.395Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JDK并发包">
 <meta name="twitter:description" content="一. Lock接口1. 简介 在Lock接口出现之前，Java程序是靠synchronized关键字实现锁功能的，而Java SE 5之后，并发包中新增了Lock接口（以及相关实现类）用来实现锁功能，它提供了与synchronized关键字类似的同步功能，只是在使用时需要显式地获取和释放锁。 区别：Lock接口缺少synchronized隐式获取释放锁的便捷性，却拥有了锁获取和释放的可操作性、可中">
-<meta name="twitter:image" content="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/374tzYntRSazjEs3zebhsL6lgdgVv8ilNNyIG7JyPiQ!/b/dGcBAAAAAAAA&bo=VAORAQAAAAADB.U!&rf=viewer_4">
+<meta name="twitter:image" content="http://yoursite.com/2019/09/15/JDK并发包/AQS%E6%A1%86%E6%9E%B6.PNG">
 
 
 
@@ -523,12 +522,12 @@
 <td>获取等待在同步队列上的线程集合。</td>
 </tr>
 </tbody></table>
-<h4 id="5-AQS的框架"><a href="#5-AQS的框架" class="headerlink" title="5. AQS的框架"></a>5. AQS的框架</h4><p>  <img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/374tzYntRSazjEs3zebhsL6lgdgVv8ilNNyIG7JyPiQ!/b/dGcBAAAAAAAA&bo=VAORAQAAAAADB.U!&rf=viewer_4" alt="image"></p>
+<h4 id="5-AQS的框架"><a href="#5-AQS的框架" class="headerlink" title="5. AQS的框架"></a>5. AQS的框架</h4><p>  <img src="AQS%E6%A1%86%E6%9E%B6.PNG" alt></p>
 <h4 id="6-AQS的实现分析"><a href="#6-AQS的实现分析" class="headerlink" title="6. AQS的实现分析"></a>6. AQS的实现分析</h4><ul>
 <li>同步队列  <ul>
 <li>AQS依赖内部的同步队列（FIFO双向队列）来完成同步状态的管理，当前线程获取同步状态失败时，同步器会将当前线程以及等待状态等信息构造成为一个节点（Node）并将其加入同步队列的尾部，同时会阻塞当前线程，当同步状态释放时，会把首节点中的线程唤醒，使其再次尝试获取同步状态。</li>
 <li>同步队列中的节点（Node）用来保存获取同步状态失败的线程引用、等待状态以及前驱和后继节点。</li>
-<li>同步队列的基本形态：<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5X0UTD8y5aCJe.i0Ih2ZUDBypQRrHJVwP1TEItIJ4Tc!/b/dDMBAAAAAAAA&bo=jwIYAQAAAAADB7Y!&rf=viewer_4" alt="image"><br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/IQhnPaltFGuR9eCb5tft.MGN1EdFTqySVYc*5bu5Psk!/b/dEcBAAAAAAAA&bo=EwPmAAAAAAADB9Q!&rf=viewer_4" alt="image"><br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/rnilPzKojpJ19i.bHLyLgiJHBNtKCboy7yB8BwzGNKc!/b/dFkAAAAAAAAA&bo=KAPGAAAAAAADB88!&rf=viewer_4" alt="image"><br>设置首节点是通过获取同步状态成功的线程来完成的，由于只有一个线程能够成功获取同步状态，因此设置头结点的方法并不需要使用CAS来保证。</li>
+<li>同步队列的基本形态：<br><img src="%E8%AE%BE%E7%BD%AE%E5%B0%BE%E8%8A%82%E7%82%B9.PNG" alt><br><img src="%E8%AE%BE%E7%BD%AE%E9%A6%96%E8%8A%82%E7%82%B9.PNG" alt><br><img src="%E5%A4%B4%E7%BB%93%E7%82%B9%E6%8B%A5%E6%9C%89%E5%90%8C%E6%AD%A5%E7%8A%B6%E6%80%81.PNG" alt><br>设置首节点是通过获取同步状态成功的线程来完成的，由于只有一个线程能够成功获取同步状态，因此设置头结点的方法并不需要使用CAS来保证。</li>
 </ul>
 </li>
 <li>独占式同步状态获取与释放<ul>
@@ -606,7 +605,7 @@
 <li>acquireQueued()使线程在等待队列中休息，有机会时（轮到自己，会被unpark()）会去尝试获取资源。获取到资源后才返回。如果在整个等待过程中被中断过，则返回true，否则返回false。</li>
 <li>如果线程在等待过程中被中断过，它是不响应的。只是获取资源后才再进行自我中断selfInterrupt()，将中断补上。  <br>
 流程图如下：
-![image](http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6bk7LUTkz*CvYLVcEiCTe7aeX1.rc3Vd7CItPaosdR8!/b/dDABAAAAAAAA&bo=NAToAAAAAAADB*o!&rf=viewer_4)
+![](acquire流程图.PNG)
 </li>
 </ol>
 </li>
@@ -747,7 +746,7 @@
 </tbody></table>
 <h4 id="4-读写锁的实现分析"><a href="#4-读写锁的实现分析" class="headerlink" title="4. 读写锁的实现分析"></a>4. 读写锁的实现分析</h4><h5 id="4-1-读写状态的设计"><a href="#4-1-读写状态的设计" class="headerlink" title="4.1 读写状态的设计"></a>4.1 读写状态的设计</h5><ul>
 <li>读写锁的自定义同步器需要在同步状态（<strong>一个整型变量</strong>）上维护多个读线程和一个写线程的状态，使得该状态的设计成为读写锁实现的关键。</li>
-<li>如果需要在一个整型变量上维护多种状态，就一定需要“按位切割使用”这个变量，读写锁将变量切分成两部分，高16位表示读，低16位表示写。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ptI5Qj1.ow8pJZM5oF.37BT7.M0wTd*O57KXekvwERE!/b/dFkAAAAAAAAA&bo=DgNfAQAAAAADB3E!&rf=viewer_4" alt="image"></li>
+<li>如果需要在一个整型变量上维护多种状态，就一定需要“按位切割使用”这个变量，读写锁将变量切分成两部分，高16位表示读，低16位表示写。<br><img src="%E8%AF%BB%E5%86%99%E4%BD%8D%E7%9A%84%E4%BD%BF%E7%94%A8.PNG" alt></li>
 <li>假设当前同步状态值为S，读状态等于 <strong>S&gt;&gt;&gt;16</strong> （无符号补0右移16位），写状态等于 <strong>S&amp;0x0000FFFF</strong> (将高16位全部抹去)。</li>
 <li>当读状态增加1时，等于 <strong>S+(1&lt;&lt;16)</strong>，也就是 <strong>S+0x000100000</strong>；当写状态增加1时，等于 <strong>S+1</strong>。</li>
 <li>根据状态的划分能得出一个推论：S不等于0时，当写状态（S&amp;0x0000FFFF）等于0时，则读状态（S&gt;&gt;&gt;16）大于0，即读锁已被获取。</li>
@@ -860,19 +859,19 @@
 <li>Condition等待队列的节点的定义复用了同步器AQS中节点的定义，也就是说，<strong>同步队列和等待队列中节点类型都是AQS的静态内部类AbstractQueuedSynchronizer.Node</strong>。</li>
 <li>等待队列是一个包含首节点和尾节点指针的单链表。</li>
 <li>尾节点的引用更新过程并没有使用CAS保证，原因在于调用await()方法的线程必定是获取了锁的线程，也就是说该过程是由锁来保证线程安全的。</li>
-<li>在Object的监视器模型上，一个对象拥有一个同步队列和等待队列，而并发包中的Lock（确切地说是AQS）拥有一个同步队列和<strong>多个</strong>等待队列（lock.newCondition()实质上返回的是AQS的ConditionObject对象）。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/uGR*3VvFWKc*QpoMPoFawAp6GuaKESMPxit1NEGS0Y4!/b/dEMBAAAAAAAA&bo=DgPqAQAAAAADB8Q!&rf=viewer_4" alt="image">  </li>
+<li>在Object的监视器模型上，一个对象拥有一个同步队列和等待队列，而并发包中的Lock（确切地说是AQS）拥有一个同步队列和<strong>多个</strong>等待队列（lock.newCondition()实质上返回的是AQS的ConditionObject对象）。<br><img src="%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97%E4%B8%8E%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97.PNG" alt></li>
 </ul>
 <p><strong>Condition的实现是同步器的内部类AbstractQueuedSynchronizer.ConditionObject</strong>，因此每个Condition实例都能够访问同步器提供的方法，相当于每个Condition都拥有所属同步器的引用。</p>
 <h5 id="2-等待"><a href="#2-等待" class="headerlink" title="2. 等待"></a>2. 等待</h5><ul>
 <li>从同步队列和等待队列的角度看await()方法，当调用await()方法时，相当于同步队列的首节点（获取了锁的节点）移动到Condition的等待队列中。</li>
-<li>如下图所示，同步队列的首节点并不会直接加入等待队列，而是通过addConditionWaiter()方法把当前线程构造成一个<strong>新的节点</strong>并将其加入等待队列。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/eJuJKNvsFSJe4tR*hd*SWf4U2EEKn.sWhdxDsF6puAE!/b/dGEBAAAAAAAA&bo=EgOJAQAAAAADB7s!&rf=viewer_4" alt="image">   </li>
+<li>如下图所示，同步队列的首节点并不会直接加入等待队列，而是通过addConditionWaiter()方法把当前线程构造成一个<strong>新的节点</strong>并将其加入等待队列。<br><img src="%E5%BD%93%E5%89%8D%E7%BA%BF%E7%A8%8B%E5%8A%A0%E5%85%A5%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97.PNG" alt></li>
 <li>await()方法的源码如下：<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">void</span> <span class="title">await</span><span class="params">()</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (Thread.interrupted())</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> InterruptedException();</span><br><span class="line">    Node node = addConditionWaiter();  <span class="comment">// 将当前线程构造成节点并加入等待队列</span></span><br><span class="line">    <span class="keyword">int</span> savedState = fullyRelease(node); <span class="comment">// 释放同步状态，也就是释放锁</span></span><br><span class="line">    <span class="keyword">int</span> interruptMode = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span> (!isOnSyncQueue(node)) &#123;</span><br><span class="line">        LockSupport.park(<span class="keyword">this</span>);</span><br><span class="line">        <span class="keyword">if</span> ((interruptMode = checkInterruptWhileWaiting(node)) != <span class="number">0</span>)</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (acquireQueued(node, savedState) &amp;&amp; interruptMode != THROW_IE) <span class="comment">// 获取同步状态</span></span><br><span class="line">        interruptMode = REINTERRUPT;</span><br><span class="line">    <span class="keyword">if</span> (node.nextWaiter != <span class="keyword">null</span>) <span class="comment">// clean up if cancelled</span></span><br><span class="line">        unlinkCancelledWaiters();</span><br><span class="line">    <span class="keyword">if</span> (interruptMode != <span class="number">0</span>)</span><br><span class="line">        reportInterruptAfterWait(interruptMode);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 </li>
 </ul>
 <p>当等待队列中的节点被唤醒，则唤醒节点的线程开始尝试获取同步状态。如果不是通过其他线程调用Condition.signal()方法唤醒，而是对等待线程进行中断，则会抛出InterruptException。</p>
 <h5 id="3-通知"><a href="#3-通知" class="headerlink" title="3. 通知"></a>3. 通知</h5><ul>
-<li><p>调用Condition的signal()方法，将会唤醒在等待队列中等待时间最长的节点（首节点），在唤醒节点之前，会将节点移动到同步队列。当节点移动到同步队列后，当前线程再使用 LockSupport 唤醒该节点的线程。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/TyWN0gxRmpc2V4B53ODQa1rIzYDO7KyRXGbpD4pUzTA!/b/dDABAAAAAAAA&bo=IgO2AQAAAAADB7Q!&rf=viewer_4" alt="image">    </p>
+<li><p>调用Condition的signal()方法，将会唤醒在等待队列中等待时间最长的节点（首节点），在唤醒节点之前，会将节点移动到同步队列。当节点移动到同步队列后，当前线程再使用 LockSupport 唤醒该节点的线程。<br><img src="%E7%AD%89%E5%BE%85%E9%98%9F%E5%88%97%E5%88%B0%E5%90%8C%E6%AD%A5%E9%98%9F%E5%88%97.PNG" alt></p>
 </li>
 <li><p>Condition的signalAll()方法，相对于对等待队列中的每个节点均执行一次signal()方法，效果就是将等待队列中的所有节点全部移动到同步队列，并唤醒每个节点的线程。</p>
 </li>
@@ -889,14 +888,14 @@
 <li><strong>提高响应速度</strong>。当任务到达时，任务可以不需要等到线程创建就能立即执行。</li>
 <li><strong>提高线程的可管理性</strong>。使用线程池可以对线程进行统一分配、调优和监控。</li>
 </ul>
-<h4 id="2-线程池的实现原理"><a href="#2-线程池的实现原理" class="headerlink" title="2. 线程池的实现原理"></a>2. 线程池的实现原理</h4><p>当提交一个新任务到线程池时，线程池的处理流程如下：<br>1) 线程池判断<strong>核心线程池</strong>里的线程是否都在执行任务。如果不是，则创建一个新的工作线程来执行任务。如果核心线程池里的线程都在执行任务，则进入下一个流程。<br>2) 线程池判断<strong>工作队列</strong>是否已满。如果工作队列没有满，则将新提交的任务存储在这个工作队列里。如果工作队列已满，则进入下一个流程。<br>3) 线程池判断线程池的线程是否都处于工作状态。如果没有，则创建一个新的工作线程来执行任务。如果已经满了，则交给饱和策略来处理这个任务。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/we9T8n4ySdyTNCAH.DK*nrGOZM*HyCw0esWwxEWL*ng!/b/dDMBAAAAAAAA&bo=JQMMAgAAAAADBwo!&rf=viewer_4" alt="image"></p>
-<p>ThreadPoolExecutor执行execute()方法的示意图如下：<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/O8W6gHkqLeZUUD8JLYTx8YAX6RL3fBLRgBQMmTuG39Q!/b/dDIBAAAAAAAA&bo=8QLnAgAAAAADBzQ!&rf=viewer_4" alt="image"></p>
+<h4 id="2-线程池的实现原理"><a href="#2-线程池的实现原理" class="headerlink" title="2. 线程池的实现原理"></a>2. 线程池的实现原理</h4><p>当提交一个新任务到线程池时，线程池的处理流程如下：<br>1) 线程池判断<strong>核心线程池</strong>里的线程是否都在执行任务。如果不是，则创建一个新的工作线程来执行任务。如果核心线程池里的线程都在执行任务，则进入下一个流程。<br>2) 线程池判断<strong>工作队列</strong>是否已满。如果工作队列没有满，则将新提交的任务存储在这个工作队列里。如果工作队列已满，则进入下一个流程。<br>3) 线程池判断线程池的线程是否都处于工作状态。如果没有，则创建一个新的工作线程来执行任务。如果已经满了，则交给饱和策略来处理这个任务。<br><img src="%E7%BA%BF%E7%A8%8B%E6%B1%A0%E7%9A%84%E4%B8%BB%E8%A6%81%E5%A4%84%E7%90%86%E6%B5%81%E7%A8%8B.PNG" alt></p>
+<p>ThreadPoolExecutor执行execute()方法的示意图如下：<br><img src="execute%E6%89%A7%E8%A1%8C%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG" alt></p>
 <p>如上图所示，ThreadPoolExecutor执行execute()方法分下面4种情况：<br>1) 如果当前运行的线程少于corePoolSize，则创建新线程来执行任务（注意，执行这一步骤<strong>需要获取全局锁</strong>）。<br>2) 如果运行的线程大于或等于corePoolSize，则将任务加入BlockingQueue。<br>3) 如果无法将任务加入BlockingQueue(队列已满)，则创建新的线程来处理任务（同样<strong>需要获取全局锁</strong>）。<br>4) 如果创建新线程将使当前运行的线程超出maximumPoolSize，任务将被拒绝，并调用RejectedExecutionHandler.rejectedException()方法。</p>
 <p>ThreadPoolExecutor采取上述步骤的<strong>总体设计思路</strong>，是为了在执行execute()方法的时候，<strong>尽可能避免获取全局锁</strong>（那将会是一个<strong>严重的可伸缩瓶颈</strong>）。在ThreadPoolExecutor完成预热之后（当前运行的线程数大于等于corePoolSize），几乎所有的execute()方法调用都是执行步骤2，而步骤2不需要获取全局锁。</p>
 <p>execute()方法的源码如下：</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">execute</span><span class="params">(Runnable command)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (command == <span class="keyword">null</span>)</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> NullPointerException();</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">int</span> c = ctl.get();</span><br><span class="line">    <span class="keyword">if</span> (workerCountOf(c) &lt; corePoolSize) &#123;</span><br><span class="line">        <span class="keyword">if</span> (addWorker(command, <span class="keyword">true</span>))</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        c = ctl.get();</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (isRunning(c) &amp;&amp; workQueue.offer(command)) &#123;</span><br><span class="line">        <span class="keyword">int</span> recheck = ctl.get();</span><br><span class="line">        <span class="keyword">if</span> (! isRunning(recheck) &amp;&amp; remove(command))</span><br><span class="line">            reject(command);</span><br><span class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (workerCountOf(recheck) == <span class="number">0</span>)</span><br><span class="line">            addWorker(<span class="keyword">null</span>, <span class="keyword">false</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (!addWorker(command, <span class="keyword">false</span>))</span><br><span class="line">        reject(command);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>工作线程：线程池创建线程时，会将线程封装成工作线程Worker，Worker在执行完任务后，还会循环获取工作队列里的任务来执行。即线程池中的线程执行任务分为两种情况：<br>1) 在execute()方法中创建一个线程时，会让这个线程执行当前任务。<br>2) 这个线程执行完上述任务后，会反复从BlockingQueue获取任务来执行。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/1CmsOQMtldcW.l9ZVLfCMoArKxU6jQQF6hMeujm2GPw!/b/dDMBAAAAAAAA&bo=DAOqAgAAAAADB4U!&rf=viewer_4" alt="image"></p>
+<p>工作线程：线程池创建线程时，会将线程封装成工作线程Worker，Worker在执行完任务后，还会循环获取工作队列里的任务来执行。即线程池中的线程执行任务分为两种情况：<br>1) 在execute()方法中创建一个线程时，会让这个线程执行当前任务。<br>2) 这个线程执行完上述任务后，会反复从BlockingQueue获取任务来执行。<br><img src="ThreadPoolExecutor%E6%89%A7%E8%A1%8C%E4%BB%BB%E5%8A%A1%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG" alt></p>
 <h4 id="3-线程池的使用"><a href="#3-线程池的使用" class="headerlink" title="3. 线程池的使用"></a>3. 线程池的使用</h4><h5 id="3-1-线程池的创建"><a href="#3-1-线程池的创建" class="headerlink" title="3.1 线程池的创建"></a>3.1 线程池的创建</h5><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ThreadPoolExecutor</span><span class="params">(<span class="keyword">int</span> corePoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">int</span> maximumPoolSize,</span></span></span><br><span class="line"><span class="function"><span class="params">                          <span class="keyword">long</span> keepAliveTime,</span></span></span><br><span class="line"><span class="function"><span class="params">                          TimeUnit unit,</span></span></span><br><span class="line"><span class="function"><span class="params">                          BlockingQueue&lt;Runnable&gt; workQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">                          ThreadFactory threadFactory,</span></span></span><br><span class="line"><span class="function"><span class="params">                          RejectedExecutionHandler handler)</span> </span>&#123;</span><br><span class="line">    <span class="comment">// details                              </span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 <ul>
@@ -933,15 +932,15 @@
 <li>IO密集型任务：可尽可能配置多一些线程数，如2*N(cpu)，因为IO处理慢，过少的线程数量可能导致任务受阻于IO。</li>
 </ul>
 <h3 id="七-Executor框架"><a href="#七-Executor框架" class="headerlink" title="七. Executor框架"></a>七. Executor框架</h3><p>Java的线程既是工作单元，也是执行机制。从JDK5开始，把工作单元与执行机制分离开来。工作单元包括Runnable和Callable，而执行机制由Executor框架提供。</p>
-<h4 id="1-Executor框架的两级调度模型"><a href="#1-Executor框架的两级调度模型" class="headerlink" title="1. Executor框架的两级调度模型"></a>1. Executor框架的两级调度模型</h4><p>在上层，Java多线程程序通常把应用分解为若干个任务，然后使用用户级的调度器（Executor框架）将这些任务映射为固定数量的线程；在底层，操作系统内核将这些线程映射到硬件处理器上。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/FuDZDyiFl3PrJrkRkLKzi.zc4y*liElIZiW.sb2b2xI!/b/dDIBAAAAAAAA&bo=.gLqAgAAAAADBzI!&rf=viewer_4" alt="image"></p>
+<h4 id="1-Executor框架的两级调度模型"><a href="#1-Executor框架的两级调度模型" class="headerlink" title="1. Executor框架的两级调度模型"></a>1. Executor框架的两级调度模型</h4><p>在上层，Java多线程程序通常把应用分解为若干个任务，然后使用用户级的调度器（Executor框架）将这些任务映射为固定数量的线程；在底层，操作系统内核将这些线程映射到硬件处理器上。<br><img src="%E4%BB%BB%E5%8A%A1%E7%9A%84%E4%B8%A4%E7%BA%A7%E8%B0%83%E5%BA%A6.PNG" alt></p>
 <p>从图中可以看出，应用程序通过Executor框架控制上层的调度；而下层的调度由操作系统内核控制，下层的调度不受应用程序的控制。</p>
 <h4 id="2-Executor框架的结构"><a href="#2-Executor框架的结构" class="headerlink" title="2. Executor框架的结构"></a>2. Executor框架的结构</h4><ul>
 <li>Executor框架的3大组成部分<br>1）<strong>任务</strong>。包括被执行任务需要实现的接口：<strong>Runnable</strong> 接口或 <strong>Callable</strong> 接口。<br>2）<strong>异步计算的结果</strong>。包括接口 <strong>Future</strong> 和实现Future接口的 <strong>FutureTask</strong> 类。<br>3）<strong>任务的执行</strong>。包括任务执行机制的核心接口 <strong>Executor</strong>，以及继承自 Executor 的 <strong>ExecutorService</strong> 接口。<br><br>Executor框架有两个关键类实现了ExecutorService接口：<strong>ThreadPoolExecutor</strong> 和<strong>ScheduledThreadPoolExecutor</strong>。<br><br>   </li>
-<li>Runnable与Callable接口<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/xSb3XpRmb08KhWrYkrKtpWDZfEnaurboVWXl3OxfPsk!/b/dC4BAAAAAAAA&bo=swB9AAAAAAADB.w!&rf=viewer_4" alt="image"><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/ldqUubUf6ijr4Pu7R*28xF181k471Gge1DXh2ya*yiI!/b/dFYAAAAAAAAA&bo=sAB.AAAAAAADB.w!&rf=viewer_4" alt="image"></li>
-<li>ScheduledFutureTask的继承结构<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/.CQfFR2PbdbE0zltsKFnkY30ruZbYtuFpk8AKcgozUw!/b/dIMAAAAAAAAA&bo=twFzAQAAAAADB.Y!&rf=viewer_4" alt="image"> </li>
-<li>ScheduledThreadPoolExecutor的继承结构<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/5LbH*5T5pzSsYoHc5a.EXT0E33bYn0eHkA9luMsAUiY!/b/dDIBAAAAAAAA&bo=qQF4AQAAAAADB*M!&rf=viewer_4" alt="image"><br>ThreadPoolExecutor是线程池的核心实现类，用来执行被提交的任务；而ScheduledThreadPoolExecutor则可以在给定的<strong>延迟</strong>后运行命令，或者<strong>定期</strong>执行命令。</li>
+<li>Runnable与Callable接口<br><img src="Runnable%E6%8E%A5%E5%8F%A3.PNG" alt></li>
+<li>ScheduledFutureTask的继承结构<br><img src="ScheduledFutureTask%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG" alt></li>
+<li>ScheduledThreadPoolExecutor的继承结构<br><img src="ScheduledThreadPoolExecutor%E7%BB%A7%E6%89%BF%E7%BB%93%E6%9E%84.PNG" alt><br>ThreadPoolExecutor是线程池的核心实现类，用来执行被提交的任务；而ScheduledThreadPoolExecutor则可以在给定的<strong>延迟</strong>后运行命令，或者<strong>定期</strong>执行命令。</li>
 </ul>
-<h4 id="3-Executor框架的使用"><a href="#3-Executor框架的使用" class="headerlink" title="3. Executor框架的使用"></a>3. Executor框架的使用</h4><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/MsxYpuhaUV7j4oLfZZbmmBu1yRn.zFyrH*z2EiFbXWI!/b/dDIBAAAAAAAA&bo=5wIvAgAAAAADB.o!&rf=viewer_4" alt="image">   </p>
+<h4 id="3-Executor框架的使用"><a href="#3-Executor框架的使用" class="headerlink" title="3. Executor框架的使用"></a>3. Executor框架的使用</h4><p><img src="Executor%E6%A1%86%E6%9E%B6%E7%9A%84%E4%BD%BF%E7%94%A8.PNG" alt></p>
 <p>如上图所示：</p>
 <ul>
 <li>主线程首先要创建实现Runnable或者Callable接口的任务对象。</li>
@@ -971,7 +970,7 @@
 <li>1.当线程池中的线程数达到corePoolSize后，新任务将在无界队列中等待，因此<strong>线程池中的线程数不会超过corePoolSize</strong>。</li>
 <li>2.由于1，使用无界队列时maximumPoolSize将是一个无效参数。</li>
 <li>3.由于1和2，使用无界队列时keepAliveTime将是一个无效参数。</li>
-<li>4.由于使用无界队列，运行中的FixedThreadPool不会拒绝任务，即不会调用RejectedExecutionHandler.rejectedException方法。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/Py8FwuXpVhgfgeykLUjVOlNin28P9EPw5.iKd.1kl88!/b/dDEBAAAAAAAA&bo=6AJgAgAAAAADB6o!&rf=viewer_4" alt="image"></li>
+<li>4.由于使用无界队列，运行中的FixedThreadPool不会拒绝任务，即不会调用RejectedExecutionHandler.rejectedException方法。<br><img src="FixedThreadPool.PNG" alt></li>
 </ul>
 </li>
 </ul>
@@ -981,7 +980,7 @@
 <ul>
 <li>SingleThreadExecutor的 corePoolSize 和 maximumPoolSize 被设置为1。</li>
 <li>SingleThreadExecutor使用<strong>无界队列LinkedBlockingQueue</strong>作为线程池的工作队列（队列容量为Integer.MAX_VALUE)。</li>
-<li>SingleThreadExecutor的执行过程与FixedThreadPool类似，唯一的区别在于线程池完成预热之后只有一个运行的线程。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/6uSeUiqBt7noCcofzBhsQ0vIqdky3PAIJkoreyh2Nxo!/b/dGEBAAAAAAAA&bo=0gKkAQAAAAADB1c!&rf=viewer_4" alt="image"></li>
+<li>SingleThreadExecutor的执行过程与FixedThreadPool类似，唯一的区别在于线程池完成预热之后只有一个运行的线程。<br><img src="SingleThreadExexutor.PNG" alt></li>
 </ul>
 <h5 id="4-3-CachedThreadPool详解"><a href="#4-3-CachedThreadPool详解" class="headerlink" title="4.3 CachedThreadPool详解"></a>4.3 CachedThreadPool详解</h5><p>CachedThreadPool是一个会根据需要创建新线程的线程池。</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                  <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -989,15 +988,15 @@
 <ul>
 <li>CachedThreadPool的<font color="red"><strong>corePoolSize设置为0</strong></font>，即corePool为空；maximumPoolSize设置为Integer.MAX_VALUE，即maximumPool是无界的；keepAliveTime设置为60L，即空闲线程等待新任务的最长时间为60秒，超时后将被终止。</li>
 <li>CachedThreadPool使用<font color="red"><strong>没有容量的 SynchronousQueue</strong></font> 作为线程池的工作队列，但maximumPool是无界的。这意味着，如果主线程提交任务的速度高于maximumPool中线程处理任务的速度时，CacheThreadPool会不断创建新线程，极端情况下会因为创建过多线程而耗尽CPU和内存资源。</li>
-<li>FixedThreadPool 和 SingleThreadExecutor 使用无界队列 <strong>LinkedBlockingQueue</strong> 作为线程池的工作队列。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/JJbEqKbhJXOMw0RUXG9PQ6e2KbREoBCN1VJVC8UOMcM!/b/dGcBAAAAAAAA&bo=BQMpAgAAAAADBw8!&rf=viewer_4" alt="image">  </li>
+<li>FixedThreadPool 和 SingleThreadExecutor 使用无界队列 <strong>LinkedBlockingQueue</strong> 作为线程池的工作队列。<br><img src="CachedThreadPool.PNG" alt></li>
 <li>空闲线程执行的SynchronousQueue.poll(keepAliveTime, TimeUnit.NANOSECONDS)操作会让线程最多在SynchronousQueue中等待60秒，该时间窗内如果有任务提交，则线程将执行任务，否则，线程将被终止。</li>
-<li><strong>SynchronousQueue是一个没有容量的阻塞队列，每个插入操作必须等待另一个线程对应的移出操作，反之亦然。</strong><br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/OBgQarKb8tVM2QutkQOCwVXiDb*BwQCl*B38JfKDOo4!/b/dDEBAAAAAAAA&bo=CQPMAQAAAAADB.U!&rf=viewer_4" alt="image">  </li>
+<li><strong>SynchronousQueue是一个没有容量的阻塞队列，每个插入操作必须等待另一个线程对应的移出操作，反之亦然。</strong><br><img src="CachedThreadPool%E4%BB%BB%E5%8A%A1%E4%BC%A0%E9%80%92%E5%9B%BE.PNG" alt></li>
 </ul>
 <h4 id="5-ScheduledThreadPoolExecutor详解"><a href="#5-ScheduledThreadPoolExecutor详解" class="headerlink" title="5. ScheduledThreadPoolExecutor详解"></a>5. ScheduledThreadPoolExecutor详解</h4><ul>
 <li>ScheduledThreadPoolExecutor继承自ThreadPoolExecutor。主要用来在给定的<strong>延迟</strong>之后运行任务，或者<strong>定期</strong>执行任务。</li>
 <li>ScheduledThreadPoolExecutor的功能与Timer类似，但ScheduledThreadPoolExecutor功能更强大、更灵活。Timer对应的是单个后台线程，而ScheduledThreadPoolExecutor可以在构造函数中指定多个对应的后台线程数。</li>
 </ul>
-<h5 id="5-1-ScheduledThreadPoolExecutor的运行机制"><a href="#5-1-ScheduledThreadPoolExecutor的运行机制" class="headerlink" title="5.1 ScheduledThreadPoolExecutor的运行机制"></a>5.1 ScheduledThreadPoolExecutor的运行机制</h5><p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/CQ41TEfIee4lZgTxfNSHLe5tch.ZHMJ35e7QgNOdk.U!/b/dFkAAAAAAAAA&bo=*AJLAgAAAAADB5U!&rf=viewer_4" alt="image"> </p>
+<h5 id="5-1-ScheduledThreadPoolExecutor的运行机制"><a href="#5-1-ScheduledThreadPoolExecutor的运行机制" class="headerlink" title="5.1 ScheduledThreadPoolExecutor的运行机制"></a>5.1 ScheduledThreadPoolExecutor的运行机制</h5><p><img src="ScheduledThreadPoolExecutor.PNG" alt></p>
 <ul>
 <li>DelayQueue是一个无界队列，所以maximumPoolSize无效。</li>
 <li>当调用 <strong>scheduleAtFixedRate()</strong> 或者 <strong>scheduleWithFixedDelay()</strong> 方法时，会向DelayQueue添加一个实现了RunnableScheduledFuture接口的ScheduledFutureTask。</li>
@@ -1009,7 +1008,7 @@
 </li>
 <li><p>DelayQueue封装了一个PriorityQueue，这个PriorityQueue会对队列中的ScheduledFutureTask进行排序，time小的优先，相同time的Task则sequenceNumber小的优先。</p>
 </li>
-<li><p>执行周期任务的示意图如下：<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/nRywo*QhNGuPmBeSUHPat2xngBzm6U7E6PyDh6z0wxk!/b/dFYAAAAAAAAA&bo=AgNWAgAAAAADB3c!&rf=viewer_4" alt="image"> </p>
+<li><p>执行周期任务的示意图如下：<br><img src="ScheuledThreadPoolExecutor%E4%BB%BB%E5%8A%A1%E6%89%A7%E8%A1%8C%E6%AD%A5%E9%AA%A4.PNG" alt></p>
 <ul>
 <li>从DelayQueue队列获取已到期的ScheduledFutureTask（DelayQueue.take()）</li>
 <li>执行任务</li>
@@ -1038,11 +1037,11 @@
 <li>FutureTask不仅<strong>实现了Future接口</strong>外，还<strong>实现了Runnable接口</strong>。因此，FutureTask可以交给Executor执行，也可以由调用线程直接执行（FutureTask.run()）。</li>
 <li>FutureTask的状态迁移图  </li>
 </ul>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/UxfgMU0ci1AbDe0oLH48GVbN.sWV1O1smSKOeuwyYrU!/b/dC8BAAAAAAAA&bo=BwOeAQAAAAADB7k!&rf=viewer_4" alt="image"></p>
+<p><img src="FutureTask%E7%8A%B6%E6%80%81%E8%BF%81%E7%A7%BB%E5%9B%BE.PNG" alt></p>
 <ul>
 <li>FutureTask的执行示意图  </li>
 </ul>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/wg7lAVSlVieF504jF*cigXn4C4nRnW7ixdxrCFhKSeE!/b/dDABAAAAAAAA&bo=CgN6AgAAAAADB1M!&rf=viewer_4" alt="image"></p>
+<p><img src="FutureTask%E7%9A%84get%E5%92%8Ccancel.PNG" alt></p>
 <h5 id="6-2-FutureTask的使用"><a href="#6-2-FutureTask的使用" class="headerlink" title="6.2 FutureTask的使用"></a>6.2 FutureTask的使用</h5><ul>
 <li>可以把FutureTask交给Executor执行（<strong>FutureTask实现了Runnable接口</strong>）。</li>
 <li>也可以通过ExecutorService.submit(…)方法返回一个FutureTask（<strong>FutureTask实现了Future接口</strong>），然后执行FutureTask.get()方法或FutureTask.cancel(…)方法。</li>
@@ -1059,7 +1058,7 @@
 <li>基于“<strong>复合优先于继承</strong>”的原则，FutureTask声明了一个<strong>内部私有的</strong>继承于AQS的子类Sync，对FutureTask所有公有方法的调用都会<strong>委托</strong>给这个内部子类。</li>
 <li>AQS被作为“<strong>模板方法模式</strong>”的基础类提供给FutureTask的内部子类Sync，这个内部子类只需要实现状态检查和状态更新的方法即可，这些方法将控制FutureTask的获取和释放操作。具体来说，Sync实现了AQS的tryAcquireShared(int)方法和tryReleaseShared(int)方法，Sync通过这两个方法来检查和更新同步状态。</li>
 </ul>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/LxB.cNXe3TCEoDt8iR26yqYBL2lkomj7K2twygRQyyc!/b/dDIBAAAAAAAA&bo=FAOaAgAAAAADB60!&rf=viewer_4" alt="image"></p>
+<p><img src="FutureTask%E7%9A%84%E8%AE%BE%E8%AE%A1%E7%A4%BA%E6%84%8F%E5%9B%BE.PNG" alt></p>
 <h4 id="7-Runnable接口和Callable接口"><a href="#7-Runnable接口和Callable接口" class="headerlink" title="7. Runnable接口和Callable接口"></a>7. Runnable接口和Callable接口</h4><ul>
 <li>Runnable接口和Callable接口的实现类，都可以被ThreadPoolExecutor或ScheduledThreadPoolExecutor执行。它们之间的区别是Runnable不会返回结果，而Callable可以返回结果。</li>
 <li>除了可以自行创建Callable接口的对象外，还可以使用工厂类Executors来把一个Runnable包装成一个Callable。<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/* 把一个Runnable包装成一个Callable */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Callable&lt;Object&gt; <span class="title">callable</span><span class="params">(Runnable task)</span>  <span class="comment">// 假设返回对象Callable1</span></span></span><br><span class="line"><span class="function"></span></span><br><span class="line"><span class="function"><span class="comment">/* 把一个Runnable和一个待返回的结果包装成一个Callable */</span></span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> &lt;T&gt; Callable&lt;T&gt; <span class="title">callable</span><span class="params">(Runnable task, T result)</span>  <span class="comment">// 假设返回对象Callable2</span></span></span><br></pre></td></tr></table></figure>
@@ -1486,12 +1485,12 @@
 </li>
 </ul>
 <h4 id="4-Fork-Join框架"><a href="#4-Fork-Join框架" class="headerlink" title="4. Fork/Join框架"></a>4. Fork/Join框架</h4><h5 id="4-1-定义"><a href="#4-1-定义" class="headerlink" title="4.1 定义"></a>4.1 定义</h5><p>Fork/Join框架是Java7提供的一个把大任务<strong>分割</strong>成若干个子任务<strong>并行执行</strong>，最终<strong>汇总</strong>每个小任务结果后得到大任务结果的框架。  </p>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/xDq8KvvWe9yegRN6*.R*oWENDixoaRplKnYkcYPQ3lw!/b/dFUAAAAAAAAA&bo=GQJgAgAAAAADB1s!&rf=viewer_4" alt="image"></p>
+<p><img src="forkjoin.PNG" alt></p>
 <h5 id="4-2-工作窃取算法"><a href="#4-2-工作窃取算法" class="headerlink" title="4.2 工作窃取算法"></a>4.2 工作窃取算法</h5><ul>
 <li>工作窃取（work-stealing）算法是指某个线程从<strong>其他队列</strong>里窃取任务来执行。</li>
 <li>为了减少窃取任务线程和被窃取任务线程之间的竞争，通常会使用<strong>双端队列</strong>，被窃取任务线程永远从双端队列的头部取任务执行，而窃取任务的线程永远从双端队列的尾部取任务执行。</li>
 <li>工作窃取算法的<strong>优点</strong>：充分利用线程进行并行计算，减少了线程间的竞争。</li>
-<li>工作窃取算法的<strong>缺点</strong>：在某些情况下还是会存在竞争，比如双端队列里只有一个任务时。并且该算法会消耗更多系统资源，比如创建多个线程和多个双端队列。<br><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/HLhVn0qE6BjtiKH1mazh4L9sdeAYJJETKNKsTXSfOjA!/b/dEABAAAAAAAA&bo=uQF*AQAAAAADB.Q!&rf=viewer_4" alt="image"></li>
+<li>工作窃取算法的<strong>缺点</strong>：在某些情况下还是会存在竞争，比如双端队列里只有一个任务时。并且该算法会消耗更多系统资源，比如创建多个线程和多个双端队列。<br><img src="steal.PNG" alt></li>
 </ul>
 <h5 id="4-3-Fork-Join框架的设计"><a href="#4-3-Fork-Join框架的设计" class="headerlink" title="4.3 Fork/Join框架的设计"></a>4.3 Fork/Join框架的设计</h5><h6 id="4-3-1-设计思路"><a href="#4-3-1-设计思路" class="headerlink" title="4.3.1 设计思路"></a>4.3.1 设计思路</h6><p><strong>步骤 1: 分割任务</strong>。 首先需要有一个fork类把大任务分割成子任务，递归分割直到分割出的子任务足够小。<br><strong>步骤 2: 执行任务并合并结果</strong>。 分割的子任务分别放在双端队列里，然后几个启动线程分别从双端队列里获取任务执行。子任务执行完的结果都统一放在一个队列里，启动一个线程从队列取数据，然后合并这些数据。   </p>
 <p>注：任务分割出的子任务会添加到当前工作线程所维护的双端队列中，进入队列的头部。当一个工作线程的队列里暂时没有任务时，它会<strong>随机</strong>从其他工作线程的队列的尾部获取一个任务。</p>
@@ -1502,7 +1501,7 @@
 <li>RecursiveTask：用于有返回结果的任务。    </li>
 </ul>
 <p>3) ForkJoinWorkerThread：执行任务的<strong>工作线程</strong>。</p>
-<p><img src="http://m.qpic.cn/psb?/V13qyI0D3HTdcl/4d5YbUJl8h5NH9FE3JXMKCv1xWY9QgIINxZtQSt5sTc!/b/dGcBAAAAAAAA&bo=VAIVAQAAAAADB2A!&rf=viewer_4" alt="image"></p>
+<p><img src="ForkJoinTask.PNG" alt></p>
 <h5 id="4-4-Fork-Join框架的实现原理"><a href="#4-4-Fork-Join框架的实现原理" class="headerlink" title="4.4 Fork/Join框架的实现原理"></a>4.4 Fork/Join框架的实现原理</h5><ul>
 <li><p>ForkJoinPool使用数组保存所有WorkQueue（即WorkQueue[]），每个worker有属于自己的WorkQueue，但不是每个WorkQueue都有对应的worker。</p>
 <ul>
